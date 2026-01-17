@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - National Parks Itinerary</title>
+</head>
+<body>
+    <h1>Testing National Parks App</h1>
+    <div id="test-results"></div>
+    
+    <script src="app.js"></script>
+    <script>
+        // Simple test to verify the app loads correctly
+        function runTests() {
+            const results = document.getElementById('test-results');
+            let testsPassed = 0;
+            let totalTests = 0;
+            
+            function test(name, condition) {
+                totalTests++;
+                if (condition) {
+                    testsPassed++;
+                    results.innerHTML += `<p style="color: green;">✓ ${name}</p>`;
+                } else {
+                    results.innerHTML += `<p style="color: red;">✗ ${name}</p>`;
+                }
+            }
+            
+            // Test if parks data is loaded
+            test('Parks data loaded', typeof parks !== 'undefined' && Object.keys(parks).length > 0);
+            
+            // Test if cities data is loaded
+            test('Cities data loaded', typeof cities !== 'undefined' && Object.keys(cities).length > 0);
+            
+            // Test if key functions exist
+            test('calculateDistance function exists', typeof calculateDistance === 'function');
+            test('generateItinerary function exists', typeof generateItinerary === 'function');
+            test('findNearbyParks function exists', typeof findNearbyParks === 'function');
+            
+            // Test sample calculation
+            if (typeof calculateDistance === 'function' && typeof cities !== 'undefined') {
+                const distance = calculateDistance(cities['New York'], cities['Los Angeles']);
+                test('Distance calculation works', distance > 2000 && distance < 3000);
+            }
+            
+            results.innerHTML += `<h3>Results: ${testsPassed}/${totalTests} tests passed</h3>`;
+            
+            if (testsPassed === totalTests) {
+                results.innerHTML += '<p style="color: green; font-weight: bold;">All tests passed! The app should work correctly.</p>';
+            } else {
+                results.innerHTML += '<p style="color: red; font-weight: bold;">Some tests failed. Check the console for errors.</p>';
+            }
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

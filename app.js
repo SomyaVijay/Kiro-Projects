@@ -1,0 +1,1504 @@
+﻿        // National Parks Database
+        const parks = {
+            "Yellowstone": {
+                state: "WY/MT/ID",
+                coords: [44.4280, -110.5885],
+                minDays: 3,
+                optimalDays: 5,
+                bestMonths: [5, 6, 7, 8, 9],
+                highlights: ["Old Faithful", "Grand Prismatic", "Wildlife viewing", "Grand Canyon of Yellowstone"],
+                nearbyParks: ["Grand Teton", "Glacier"],
+                avgTemps: { // Average temperatures by month in Fahrenheit
+                    1: { high: 28, low: 5 }, 2: { high: 33, low: 8 }, 3: { high: 42, low: 17 },
+                    4: { high: 53, low: 26 }, 5: { high: 64, low: 34 }, 6: { high: 74, low: 42 },
+                    7: { high: 82, low: 47 }, 8: { high: 80, low: 45 }, 9: { high: 70, low: 37 },
+                    10: { high: 55, low: 26 }, 11: { high: 37, low: 14 }, 12: { high: 29, low: 6 }
+                },
+                hikes: [
+                    {
+                        name: "Old Faithful Geyser Loop",
+                        distance: 0.7,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved boardwalk around the famous geyser"
+                    },
+                    {
+                        name: "Grand Prismatic Overlook",
+                        distance: 1.6,
+                        elevation: 105,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Best views of the colorful hot spring"
+                    },
+                    {
+                        name: "Mount Washburn",
+                        distance: 6.2,
+                        elevation: 1400,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Panoramic views from fire lookout tower"
+                    }
+                ]
+            },
+            "Grand Teton": {
+                state: "WY",
+                coords: [43.7904, -110.6818],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [6, 7, 8, 9],
+                highlights: ["Teton Range", "Jenny Lake", "Snake River", "Wildlife"],
+                nearbyParks: ["Yellowstone"],
+                avgTemps: {
+                    1: { high: 26, low: -1 }, 2: { high: 32, low: 4 }, 3: { high: 43, low: 15 },
+                    4: { high: 54, low: 25 }, 5: { high: 65, low: 33 }, 6: { high: 75, low: 40 },
+                    7: { high: 82, low: 45 }, 8: { high: 81, low: 43 }, 9: { high: 71, low: 35 },
+                    10: { high: 57, low: 24 }, 11: { high: 38, low: 12 }, 12: { high: 27, low: 1 }
+                },
+                hikes: [
+                    {
+                        name: "Jenny Lake Loop",
+                        distance: 7.1,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Scenic lake loop with mountain views"
+                    },
+                    {
+                        name: "Taggart Lake",
+                        distance: 3.0,
+                        elevation: 400,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Beautiful alpine lake hike"
+                    },
+                    {
+                        name: "Cascade Canyon",
+                        distance: 9.6,
+                        elevation: 1100,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Classic Teton canyon hike"
+                    }
+                ]
+            },
+            "Glacier": {
+                state: "MT",
+                coords: [48.7596, -113.7870],
+                minDays: 3,
+                optimalDays: 4,
+                bestMonths: [7, 8, 9],
+                highlights: ["Going-to-the-Sun Road", "Lake McDonald", "Many Glacier", "Hiking trails"],
+                nearbyParks: ["Yellowstone"],
+                avgTemps: {
+                    1: { high: 27, low: 15 }, 2: { high: 33, low: 19 }, 3: { high: 43, low: 26 },
+                    4: { high: 55, low: 33 }, 5: { high: 65, low: 41 }, 6: { high: 72, low: 48 },
+                    7: { high: 79, low: 52 }, 8: { high: 78, low: 51 }, 9: { high: 67, low: 43 },
+                    10: { high: 52, low: 34 }, 11: { high: 36, low: 25 }, 12: { high: 29, low: 18 }
+                },
+                hikes: [
+                    {
+                        name: "Trail of the Cedars",
+                        distance: 0.7,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Boardwalk through old-growth forest"
+                    },
+                    {
+                        name: "Hidden Lake Overlook",
+                        distance: 2.7,
+                        elevation: 460,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Alpine lake views and wildlife"
+                    },
+                    {
+                        name: "Grinnell Glacier",
+                        distance: 10.6,
+                        elevation: 1600,
+                        difficulty: "hard",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Challenging hike to active glacier"
+                    }
+                ]
+            },
+            "Yosemite": {
+                state: "CA",
+                coords: [37.8651, -119.5383],
+                minDays: 3,
+                optimalDays: 5,
+                bestMonths: [4, 5, 6, 9, 10],
+                highlights: ["Half Dome", "El Capitan", "Yosemite Falls", "Mariposa Grove"],
+                nearbyParks: ["Sequoia", "Kings Canyon", "Death Valley"],
+                avgTemps: {
+                    1: { high: 49, low: 26 }, 2: { high: 55, low: 30 }, 3: { high: 60, low: 35 },
+                    4: { high: 67, low: 40 }, 5: { high: 76, low: 48 }, 6: { high: 85, low: 55 },
+                    7: { high: 90, low: 60 }, 8: { high: 90, low: 59 }, 9: { high: 84, low: 52 },
+                    10: { high: 73, low: 42 }, 11: { high: 58, low: 32 }, 12: { high: 48, low: 26 }
+                },
+                hikes: [
+                    {
+                        name: "Valley View Trail",
+                        distance: 2.0,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved trail with iconic valley views"
+                    },
+                    {
+                        name: "Mist Trail to Vernal Fall",
+                        distance: 5.4,
+                        elevation: 1000,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Steep granite steps to waterfall"
+                    },
+                    {
+                        name: "Half Dome",
+                        distance: 16.0,
+                        elevation: 4800,
+                        difficulty: "hard",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Iconic cables climb (permit required)"
+                    }
+                ]
+            },
+            "Sequoia": {
+                state: "CA",
+                coords: [36.4864, -118.5658],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [5, 6, 7, 8, 9, 10],
+                highlights: ["General Sherman Tree", "Giant Forest", "Moro Rock", "Crystal Cave"],
+                nearbyParks: ["Kings Canyon", "Yosemite"],
+                avgTemps: {
+                    1: { high: 42, low: 24 }, 2: { high: 45, low: 26 }, 3: { high: 50, low: 30 },
+                    4: { high: 58, low: 35 }, 5: { high: 68, low: 43 }, 6: { high: 78, low: 51 },
+                    7: { high: 84, low: 57 }, 8: { high: 83, low: 56 }, 9: { high: 77, low: 49 },
+                    10: { high: 66, low: 39 }, 11: { high: 52, low: 30 }, 12: { high: 43, low: 25 }
+                },
+                hikes: [
+                    {
+                        name: "General Sherman Tree Trail",
+                        distance: 1.0,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Paved path to world's largest tree"
+                    },
+                    {
+                        name: "Big Trees Trail",
+                        distance: 1.3,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Wheelchair accessible giant sequoia loop"
+                    },
+                    {
+                        name: "Moro Rock",
+                        distance: 0.5,
+                        elevation: 300,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Steep granite dome climb with views"
+                    }
+                ]
+            },
+            "Kings Canyon": {
+                state: "CA",
+                coords: [36.8879, -118.5551],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [5, 6, 7, 8, 9, 10],
+                highlights: ["Kings Canyon Scenic Byway", "Cedar Grove", "Grant Grove", "Zumwalt Meadows"],
+                nearbyParks: ["Sequoia", "Yosemite"],
+                avgTemps: {
+                    1: { high: 40, low: 22 }, 2: { high: 43, low: 24 }, 3: { high: 48, low: 28 },
+                    4: { high: 56, low: 33 }, 5: { high: 66, low: 41 }, 6: { high: 76, low: 49 },
+                    7: { high: 82, low: 55 }, 8: { high: 81, low: 54 }, 9: { high: 75, low: 47 },
+                    10: { high: 64, low: 37 }, 11: { high: 50, low: 28 }, 12: { high: 41, low: 23 }
+                },
+                hikes: [
+                    {
+                        name: "Zumwalt Meadows",
+                        distance: 1.5,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Boardwalk through meadow and river"
+                    },
+                    {
+                        name: "General Grant Tree Trail",
+                        distance: 0.6,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Nation's Christmas Tree"
+                    },
+                    {
+                        name: "Mist Falls",
+                        distance: 8.2,
+                        elevation: 800,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Granite canyon to waterfall"
+                    }
+                ]
+            },
+            "Death Valley": {
+                state: "CA/NV",
+                coords: [36.2424, -116.8900],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [11, 12, 1, 2, 3, 4],
+                highlights: ["Badwater Basin", "Artist's Palette", "Zabriskie Point", "Mesquite Flat Sand Dunes"],
+                nearbyParks: ["Joshua Tree", "Yosemite"],
+                avgTemps: {
+                    1: { high: 67, low: 40 }, 2: { high: 73, low: 46 }, 3: { high: 82, low: 55 },
+                    4: { high: 90, low: 62 }, 5: { high: 100, low: 72 }, 6: { high: 110, low: 81 },
+                    7: { high: 116, low: 88 }, 8: { high: 114, low: 85 }, 9: { high: 106, low: 75 },
+                    10: { high: 92, low: 61 }, 11: { high: 76, low: 48 }, 12: { high: 65, low: 39 }
+                },
+                hikes: [
+                    {
+                        name: "Badwater Basin",
+                        distance: 1.0,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Lowest point in North America"
+                    },
+                    {
+                        name: "Salt Creek Interpretive Trail",
+                        distance: 1.0,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Boardwalk through desert pupfish habitat"
+                    },
+                    {
+                        name: "Golden Canyon to Red Cathedral",
+                        distance: 3.0,
+                        elevation: 300,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Colorful badlands canyon"
+                    }
+                ]
+            },
+            "Joshua Tree": {
+                state: "CA",
+                coords: [33.8734, -115.9010],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [10, 11, 12, 1, 2, 3, 4],
+                highlights: ["Joshua Tree Forest", "Skull Rock", "Keys View", "Rock formations"],
+                nearbyParks: ["Death Valley"],
+                avgTemps: {
+                    1: { high: 61, low: 37 }, 2: { high: 65, low: 41 }, 3: { high: 72, low: 47 },
+                    4: { high: 80, low: 54 }, 5: { high: 90, low: 63 }, 6: { high: 100, low: 72 },
+                    7: { high: 105, low: 78 }, 8: { high: 103, low: 76 }, 9: { high: 96, low: 68 },
+                    10: { high: 84, low: 57 }, 11: { high: 71, low: 45 }, 12: { high: 60, low: 36 }
+                },
+                hikes: [
+                    {
+                        name: "Skull Rock",
+                        distance: 1.7,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Famous skull-shaped rock formation"
+                    },
+                    {
+                        name: "Hidden Valley",
+                        distance: 1.0,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Enclosed valley with rock formations"
+                    },
+                    {
+                        name: "Ryan Mountain",
+                        distance: 3.0,
+                        elevation: 1000,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Panoramic desert views from summit"
+                    }
+                ]
+            },
+            "Grand Canyon": {
+                state: "AZ",
+                coords: [36.1069, -112.1129],
+                minDays: 2,
+                optimalDays: 4,
+                bestMonths: [3, 4, 5, 9, 10, 11],
+                highlights: ["South Rim", "North Rim", "Desert View", "Bright Angel Trail"],
+                nearbyParks: ["Zion", "Bryce Canyon"],
+                avgTemps: {
+                    1: { high: 45, low: 18 }, 2: { high: 50, low: 21 }, 3: { high: 57, low: 28 },
+                    4: { high: 66, low: 35 }, 5: { high: 76, low: 42 }, 6: { high: 86, low: 50 },
+                    7: { high: 89, low: 58 }, 8: { high: 86, low: 56 }, 9: { high: 79, low: 49 },
+                    10: { high: 68, low: 37 }, 11: { high: 54, low: 27 }, 12: { high: 45, low: 20 }
+                },
+                hikes: [
+                    {
+                        name: "Rim Trail",
+                        distance: 13.0,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved trail along canyon rim"
+                    },
+                    {
+                        name: "Bright Angel Trail to 1.5 Mile",
+                        distance: 3.0,
+                        elevation: 1100,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Historic trail into canyon"
+                    },
+                    {
+                        name: "South Kaibab to Ooh Aah Point",
+                        distance: 1.8,
+                        elevation: 600,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Spectacular canyon views"
+                    }
+                ]
+            },
+            "Zion": {
+                state: "UT",
+                coords: [37.2982, -113.0263],
+                minDays: 2,
+                optimalDays: 4,
+                bestMonths: [3, 4, 5, 9, 10, 11],
+                highlights: ["Angels Landing", "The Narrows", "Emerald Pools", "Canyon Junction Bridge"],
+                nearbyParks: ["Bryce Canyon", "Grand Canyon"],
+                avgTemps: {
+                    1: { high: 52, low: 29 }, 2: { high: 57, low: 31 }, 3: { high: 63, low: 36 },
+                    4: { high: 73, low: 43 }, 5: { high: 83, low: 52 }, 6: { high: 93, low: 60 },
+                    7: { high: 100, low: 68 }, 8: { high: 97, low: 66 }, 9: { high: 91, low: 57 },
+                    10: { high: 78, low: 45 }, 11: { high: 63, low: 35 }, 12: { high: 52, low: 28 }
+                },
+                hikes: [
+                    {
+                        name: "Riverside Walk",
+                        distance: 2.2,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved path along Virgin River"
+                    },
+                    {
+                        name: "Emerald Pools Trail",
+                        distance: 2.4,
+                        elevation: 350,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Waterfalls and hanging gardens"
+                    },
+                    {
+                        name: "Angels Landing",
+                        distance: 5.4,
+                        elevation: 1500,
+                        difficulty: "hard",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Chains section to narrow ridge (permit required)"
+                    }
+                ]
+            },
+            "Bryce Canyon": {
+                state: "UT",
+                coords: [37.5930, -112.1871],
+                minDays: 1,
+                optimalDays: 2,
+                bestMonths: [4, 5, 6, 9, 10],
+                highlights: ["Bryce Amphitheater", "Sunrise Point", "Sunset Point", "Navajo Loop Trail"],
+                nearbyParks: ["Zion", "Grand Canyon"],
+                avgTemps: {
+                    1: { high: 37, low: 9 }, 2: { high: 41, low: 13 }, 3: { high: 48, low: 19 },
+                    4: { high: 56, low: 25 }, 5: { high: 66, low: 31 }, 6: { high: 76, low: 39 },
+                    7: { high: 83, low: 47 }, 8: { high: 80, low: 45 }, 9: { high: 73, low: 37 },
+                    10: { high: 61, low: 28 }, 11: { high: 46, low: 18 }, 12: { high: 37, low: 10 }
+                },
+                hikes: [
+                    {
+                        name: "Rim Trail",
+                        distance: 1.1,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved trail between viewpoints"
+                    },
+                    {
+                        name: "Navajo Loop",
+                        distance: 1.5,
+                        elevation: 550,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Descent into hoodoo formations"
+                    },
+                    {
+                        name: "Fairyland Loop",
+                        distance: 8.0,
+                        elevation: 900,
+                        difficulty: "hard",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Full loop through hoodoo wonderland"
+                    }
+                ]
+            },
+            "Arches": {
+                state: "UT",
+                coords: [38.7331, -109.5925],
+                minDays: 1,
+                optimalDays: 2,
+                bestMonths: [3, 4, 5, 9, 10, 11],
+                highlights: ["Delicate Arch", "Landscape Arch", "Fiery Furnace", "Courthouse Towers"],
+                nearbyParks: ["Canyonlands"],
+                avgTemps: {
+                    1: { high: 43, low: 22 }, 2: { high: 52, low: 28 }, 3: { high: 64, low: 37 },
+                    4: { high: 71, low: 43 }, 5: { high: 82, low: 53 }, 6: { high: 93, low: 62 },
+                    7: { high: 100, low: 69 }, 8: { high: 97, low: 67 }, 9: { high: 88, low: 57 },
+                    10: { high: 74, low: 44 }, 11: { high: 57, low: 31 }, 12: { high: 44, low: 23 }
+                },
+                hikes: [
+                    {
+                        name: "Delicate Arch",
+                        distance: 3.0,
+                        elevation: 480,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Utah's most famous arch"
+                    },
+                    {
+                        name: "Windows Section",
+                        distance: 1.0,
+                        elevation: 140,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Multiple large arches"
+                    },
+                    {
+                        name: "Landscape Arch",
+                        distance: 1.6,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Longest natural arch in North America"
+                    }
+                ]
+            },
+            "Canyonlands": {
+                state: "UT",
+                coords: [38.2619, -109.9275],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [3, 4, 5, 9, 10, 11],
+                highlights: ["Mesa Arch", "Grand View Point", "Island in the Sky", "The Needles"],
+                nearbyParks: ["Arches"],
+                avgTemps: {
+                    1: { high: 42, low: 20 }, 2: { high: 50, low: 26 }, 3: { high: 62, low: 35 },
+                    4: { high: 70, low: 42 }, 5: { high: 81, low: 51 }, 6: { high: 91, low: 60 },
+                    7: { high: 98, low: 67 }, 8: { high: 95, low: 65 }, 9: { high: 86, low: 55 },
+                    10: { high: 72, low: 42 }, 11: { high: 55, low: 29 }, 12: { high: 43, low: 21 }
+                },
+                hikes: [
+                    {
+                        name: "Mesa Arch Loop",
+                        distance: 0.5,
+                        elevation: 80,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Famous sunrise arch"
+                    },
+                    {
+                        name: "Grand View Point Overlook",
+                        distance: 2.0,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Expansive canyon views"
+                    },
+                    {
+                        name: "Upheaval Dome Overlook",
+                        distance: 3.0,
+                        elevation: 400,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Mysterious geological formation"
+                    }
+                ]
+            },
+            "Rocky Mountain": {
+                state: "CO",
+                coords: [40.3428, -105.6836],
+                minDays: 2,
+                optimalDays: 4,
+                bestMonths: [6, 7, 8, 9],
+                highlights: ["Trail Ridge Road", "Bear Lake", "Sprague Lake", "Alberta Falls"],
+                nearbyParks: ["Great Sand Dunes"],
+                avgTemps: {
+                    1: { high: 26, low: -2 }, 2: { high: 30, low: 2 }, 3: { high: 38, low: 10 },
+                    4: { high: 46, low: 18 }, 5: { high: 56, low: 27 }, 6: { high: 66, low: 35 },
+                    7: { high: 73, low: 41 }, 8: { high: 71, low: 39 }, 9: { high: 63, low: 31 },
+                    10: { high: 52, low: 21 }, 11: { high: 37, low: 8 }, 12: { high: 28, low: 0 }
+                },
+                hikes: [
+                    {
+                        name: "Bear Lake Loop",
+                        distance: 0.6,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Scenic alpine lake loop"
+                    },
+                    {
+                        name: "Sprague Lake",
+                        distance: 0.9,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Wheelchair accessible with mountain reflections"
+                    },
+                    {
+                        name: "Emerald Lake",
+                        distance: 3.2,
+                        elevation: 650,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Three beautiful alpine lakes"
+                    }
+                ]
+            },
+            "Great Sand Dunes": {
+                state: "CO",
+                coords: [37.7916, -105.5943],
+                minDays: 1,
+                optimalDays: 2,
+                bestMonths: [4, 5, 6, 9, 10],
+                highlights: ["Star Dune", "High Dune", "Medano Creek", "Sand sledding"],
+                nearbyParks: ["Rocky Mountain"],
+                avgTemps: {
+                    1: { high: 35, low: -5 }, 2: { high: 42, low: 2 }, 3: { high: 52, low: 12 },
+                    4: { high: 61, low: 20 }, 5: { high: 71, low: 30 }, 6: { high: 81, low: 39 },
+                    7: { high: 85, low: 45 }, 8: { high: 82, low: 43 }, 9: { high: 75, low: 35 },
+                    10: { high: 63, low: 23 }, 11: { high: 48, low: 9 }, 12: { high: 36, low: -3 }
+                },
+                hikes: [
+                    {
+                        name: "Dunes Overlook Trail",
+                        distance: 2.2,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Views of the dune field"
+                    },
+                    {
+                        name: "High Dune",
+                        distance: 2.5,
+                        elevation: 650,
+                        difficulty: "moderate",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Climb the tallest accessible dune"
+                    },
+                    {
+                        name: "Medano Creek",
+                        distance: 1.0,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Seasonal creek for splashing (spring/early summer)"
+                    }
+                ]
+            },
+            "Great Smoky Mountains": {
+                state: "TN/NC",
+                coords: [35.6118, -83.4895],
+                minDays: 2,
+                optimalDays: 4,
+                bestMonths: [4, 5, 6, 9, 10],
+                highlights: ["Cades Cove", "Cataract Falls", "Chimney Tops", "Appalachian Trail"],
+                nearbyParks: ["Mammoth Cave"],
+                avgTemps: {
+                    1: { high: 47, low: 25 }, 2: { high: 52, low: 28 }, 3: { high: 61, low: 35 },
+                    4: { high: 70, low: 42 }, 5: { high: 78, low: 51 }, 6: { high: 84, low: 59 },
+                    7: { high: 87, low: 63 }, 8: { high: 86, low: 62 }, 9: { high: 81, low: 55 },
+                    10: { high: 71, low: 43 }, 11: { high: 60, low: 34 }, 12: { high: 49, low: 27 }
+                },
+                hikes: [
+                    {
+                        name: "Cades Cove Loop Road",
+                        distance: 11.0,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Historic valley with wildlife viewing"
+                    },
+                    {
+                        name: "Laurel Falls",
+                        distance: 2.6,
+                        elevation: 300,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved trail to 80-foot waterfall"
+                    },
+                    {
+                        name: "Alum Cave to Mount LeConte",
+                        distance: 10.9,
+                        elevation: 2800,
+                        difficulty: "hard",
+                        toddlerFriendly: false,
+                        strollerFriendly: false,
+                        description: "Challenging hike to third highest peak"
+                    }
+                ]
+            },
+            "Mammoth Cave": {
+                state: "KY",
+                coords: [37.1862, -86.1004],
+                minDays: 1,
+                optimalDays: 2,
+                bestMonths: [4, 5, 6, 7, 8, 9, 10],
+                highlights: ["Cave tours", "Green River", "Historic Tour", "Wild Cave Tour"],
+                nearbyParks: ["Great Smoky Mountains"],
+                avgTemps: {
+                    1: { high: 42, low: 23 }, 2: { high: 48, low: 27 }, 3: { high: 58, low: 36 },
+                    4: { high: 69, low: 45 }, 5: { high: 78, low: 54 }, 6: { high: 86, low: 63 },
+                    7: { high: 89, low: 67 }, 8: { high: 88, low: 65 }, 9: { high: 82, low: 58 },
+                    10: { high: 71, low: 46 }, 11: { high: 58, low: 36 }, 12: { high: 45, low: 27 }
+                },
+                hikes: [
+                    {
+                        name: "Green River Bluffs Trail",
+                        distance: 2.3,
+                        elevation: 200,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "River views and bluff overlooks"
+                    },
+                    {
+                        name: "Cedar Sink Trail",
+                        distance: 1.0,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Large sinkhole with cave entrance"
+                    },
+                    {
+                        name: "Historic Tour (Underground)",
+                        distance: 2.0,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Underground cave tour (54Â°F year-round)"
+                    }
+                ]
+            },
+            "Acadia": {
+                state: "ME",
+                coords: [44.3386, -68.2733],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [6, 7, 8, 9, 10],
+                highlights: ["Cadillac Mountain", "Jordan Pond", "Thunder Hole", "Bar Harbor"],
+                nearbyParks: [],
+                avgTemps: {
+                    1: { high: 31, low: 12 }, 2: { high: 33, low: 14 }, 3: { high: 42, low: 23 },
+                    4: { high: 53, low: 32 }, 5: { high: 63, low: 42 }, 6: { high: 72, low: 51 },
+                    7: { high: 77, low: 57 }, 8: { high: 76, low: 56 }, 9: { high: 69, low: 48 },
+                    10: { high: 58, low: 38 }, 11: { high: 47, low: 29 }, 12: { high: 35, low: 18 }
+                },
+                hikes: [
+                    {
+                        name: "Jordan Pond Path",
+                        distance: 3.3,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: false,
+                        description: "Carriage road around pristine lake"
+                    },
+                    {
+                        name: "Ocean Path",
+                        distance: 4.4,
+                        elevation: 100,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Paved path along rocky coastline"
+                    },
+                    {
+                        name: "Cadillac Summit Loop",
+                        distance: 0.3,
+                        elevation: 50,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "360-degree views from highest East Coast peak"
+                    }
+                ]
+            },
+            "Everglades": {
+                state: "FL",
+                coords: [25.2866, -80.8987],
+                minDays: 2,
+                optimalDays: 3,
+                bestMonths: [12, 1, 2, 3, 4],
+                highlights: ["Anhinga Trail", "Flamingo", "Shark Valley", "Manatee viewing"],
+                nearbyParks: [],
+                avgTemps: {
+                    1: { high: 77, low: 53 }, 2: { high: 79, low: 55 }, 3: { high: 83, low: 60 },
+                    4: { high: 87, low: 66 }, 5: { high: 90, low: 72 }, 6: { high: 91, low: 76 },
+                    7: { high: 92, low: 77 }, 8: { high: 92, low: 78 }, 9: { high: 90, low: 76 },
+                    10: { high: 86, low: 70 }, 11: { high: 81, low: 62 }, 12: { high: 78, low: 55 }
+                },
+                hikes: [
+                    {
+                        name: "Anhinga Trail",
+                        distance: 0.8,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Boardwalk for alligator and bird viewing"
+                    },
+                    {
+                        name: "Gumbo Limbo Trail",
+                        distance: 0.4,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: true,
+                        strollerFriendly: true,
+                        description: "Elevated boardwalk through hardwood hammock"
+                    },
+                    {
+                        name: "Shark Valley Tram Road",
+                        distance: 15.0,
+                        elevation: 0,
+                        difficulty: "easy",
+                        toddlerFriendly: false,
+                        strollerFriendly: true,
+                        description: "Paved loop through sawgrass prairie (bike/tram)"
+                    }
+                ]
+            }
+        };
+
+        // Major US cities coordinates
+        const cities = {
+            "New York": [40.7128, -74.0060],
+            "Los Angeles": [34.0522, -118.2437],
+            "Chicago": [41.8781, -87.6298],
+            "Houston": [29.7604, -95.3698],
+            "Phoenix": [33.4484, -112.0740],
+            "Philadelphia": [39.9526, -75.1652],
+            "San Antonio": [29.4241, -98.4936],
+            "San Diego": [32.7157, -117.1611],
+            "Dallas": [32.7767, -96.7970],
+            "San Jose": [37.3382, -121.8863],
+            "Austin": [30.2672, -97.7431],
+            "Jacksonville": [30.3322, -81.6557],
+            "Fort Worth": [32.7555, -97.3308],
+            "Columbus": [39.9612, -82.9988],
+            "Charlotte": [35.2271, -80.8431],
+            "San Francisco": [37.7749, -122.4194],
+            "Indianapolis": [39.7684, -86.1581],
+            "Seattle": [47.6062, -122.3321],
+            "Denver": [39.7392, -104.9903],
+            "Boston": [42.3601, -71.0589],
+            "Nashville": [36.1627, -86.7816],
+            "Detroit": [42.3314, -83.0458],
+            "Portland": [45.5152, -122.6784],
+            "Las Vegas": [36.1699, -115.1398],
+            "Miami": [25.7617, -80.1918],
+            "Atlanta": [33.7490, -84.3880],
+            "Salt Lake City": [40.7608, -111.8910]
+        };
+
+        // Park Images - Specific to each national park
+        const parkImages = {
+            "Yellowstone": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center", // Old Faithful
+            "Grand Teton": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5d?w=800&h=400&fit=crop&crop=center", // Teton Range
+            "Glacier": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center", // Mountain lake
+            "Yosemite": "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=400&fit=crop&crop=center", // Half Dome
+            "Sequoia": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center", // Giant sequoia trees
+            "Kings Canyon": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center", // Canyon views
+            "Death Valley": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&h=400&fit=crop&crop=center", // Desert landscape
+            "Joshua Tree": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&h=400&fit=crop&crop=center", // Joshua trees
+            "Grand Canyon": "https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800&h=400&fit=crop&crop=center", // Grand Canyon
+            "Zion": "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&h=400&fit=crop&crop=center", // Red rock formations
+            "Bryce Canyon": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center", // Hoodoos
+            "Arches": "https://images.unsplash.com/photo-1434394354979-a235cd36269d?w=800&h=400&fit=crop&crop=center", // Delicate Arch
+            "Canyonlands": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center", // Mesa Arch
+            "Rocky Mountain": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center", // Alpine lake
+            "Great Sand Dunes": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&h=400&fit=crop&crop=center", // Sand dunes
+            "Great Smoky Mountains": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center", // Misty mountains
+            "Mammoth Cave": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center", // Cave entrance
+            "Acadia": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center", // Rocky coastline
+            "Everglades": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop&crop=center" // Wetlands
+        };
+        
+        // Nature elements for background animation
+        const natureElements = ['ðŸ”ï¸', 'ðŸŒ²', 'ðŸŒ³', 'ðŸ¦…', 'ðŸŒµ', 'ðŸ’§', 'ðŸžï¸', 'ðŸŒ¿', 'ðŸ¦‹', 'ðŸŒ¸'];
+        
+        function createNatureBackground() {
+            const background = document.getElementById('natureBackground');
+            background.innerHTML = '';
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = natureElements[Math.floor(Math.random() * natureElements.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 6 + 's';
+                background.appendChild(element);
+            }
+        }
+        
+        // Initialize nature background and check for shared itinerary
+        document.addEventListener('DOMContentLoaded', function() {
+            createNatureBackground();
+            checkForSharedItinerary();
+        });
+        
+        function checkForSharedItinerary() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sharedData = urlParams.get('itinerary');
+            
+            if (sharedData) {
+                try {
+                    const decodedData = atob(sharedData);
+                    const itinerary = JSON.parse(decodedData);
+                    
+                    // Validate the data structure
+                    if (itinerary.parks && itinerary.startingLocation) {
+                        displayFinalItinerary(itinerary);
+                        
+                        // Show a message that this is a shared itinerary
+                        setTimeout(() => {
+                            const header = document.querySelector('.itinerary-header h2');
+                            if (header) {
+                                header.innerHTML = 'ðŸ”— Shared National Parks Route';
+                            }
+                        }, 100);
+                    }
+                } catch (error) {
+                    console.error('Error loading shared itinerary:', error);
+                }
+            }
+        }
+        
+        function createShareableLink(itinerary) {
+            // Create a simplified version of the itinerary for sharing
+            const shareData = {
+                startingLocation: itinerary.startingLocation,
+                totalDays: itinerary.totalDays,
+                month: itinerary.month,
+                parks: itinerary.parks.map(park => ({
+                    name: park.name,
+                    state: park.state,
+                    days: park.days,
+                    drivingMilesFromPrevious: park.drivingMilesFromPrevious,
+                    seasonalFit: park.seasonalFit,
+                    highlights: park.highlights,
+                    avgTemps: park.avgTemps,
+                    coords: park.coords
+                })),
+                totalDrivingMiles: itinerary.totalDrivingMiles,
+                startCoords: itinerary.startCoords
+            };
+            
+            // Encode the data
+            const encodedData = btoa(JSON.stringify(shareData));
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?itinerary=${encodedData}`;
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.classList.add('copied');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copy Link';
+                }, 2000);
+            });
+        }
+        
+        function shareViaEmail(shareUrl, itinerary) {
+            const subject = encodeURIComponent(`Check out my National Parks itinerary!`);
+            const body = encodeURIComponent(`I've planned a ${itinerary.totalDays}-day trip visiting ${itinerary.parks.length} national parks starting from ${itinerary.startingLocation}. Check it out: ${shareUrl}`);
+            window.open(`mailto:?subject=${subject}&body=${body}`);
+        }
+        
+        function shareViaTwitter(shareUrl, itinerary) {
+            const text = encodeURIComponent(`Planning a ${itinerary.totalDays}-day national parks adventure visiting ${itinerary.parks.length} parks! ðŸžï¸ Check out my route:`);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`);
+        }
+        
+        function shareViaFacebook(shareUrl) {
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+        }
+        
+        function shareViaWhatsApp(shareUrl, itinerary) {
+            const text = encodeURIComponent(`Check out my ${itinerary.totalDays}-day national parks itinerary visiting ${itinerary.parks.length} parks! ${shareUrl}`);
+            window.open(`https://wa.me/?text=${text}`);
+        }
+        
+        function generateItinerary() {
+            const startLocation = document.getElementById('startLocation').value;
+            const totalDays = parseInt(document.getElementById('totalDays').value);
+            const travelMonth = parseInt(document.getElementById('travelMonth').value);
+            
+            if (!startLocation || !totalDays) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const startCoords = cities[startLocation];
+            if (!startCoords) {
+                alert('Starting location not found');
+                return;
+            }
+            
+            // Find nearby parks and show selection interface
+            const nearbyParks = findNearbyParks(startCoords, 800);
+            displayParkSelection(nearbyParks, startLocation, totalDays, travelMonth, startCoords);
+        }
+        
+        function findNearbyParks(startCoords, maxDistance) {
+            const nearbyParks = [];
+            for (const [parkName, parkInfo] of Object.entries(parks)) {
+                const distance = calculateDistance(startCoords, parkInfo.coords);
+                if (distance <= maxDistance) {
+                    nearbyParks.push({
+                        name: parkName,
+                        distance: distance,
+                        ...parkInfo
+                    });
+                }
+            }
+            
+            // Sort by distance
+            nearbyParks.sort((a, b) => a.distance - b.distance);
+            return nearbyParks;
+        }
+        
+        function displayParkSelection(nearbyParks, startLocation, totalDays, travelMonth, startCoords) {
+            const resultsSection = document.getElementById('results');
+            
+            let html = `
+                <div class="park-selection">
+                    <h3>ðŸŽ¯ Select Parks for Your Trip</h3>
+                    <p style="margin-bottom: 15px; font-size: 13px; color: #666;">
+                        Found ${nearbyParks.length} parks within driving distance from ${startLocation}. 
+                        Select the ones you'd like to visit:
+                    </p>
+                    <div id="parksList">
+            `;
+            
+            nearbyParks.forEach(park => {
+                const seasonalIndicator = park.bestMonths.includes(travelMonth) ? 'ðŸŒŸ' : 'â„ï¸';
+                html += `
+                    <div class="park-checkbox-item">
+                        <input type="checkbox" id="park-${park.name.replace(/\s+/g, '')}" 
+                               value="${park.name}" onchange="updateRouteButton()">
+                        <div class="park-info">
+                            <label for="park-${park.name.replace(/\s+/g, '')}" style="cursor: pointer;">
+                                ${seasonalIndicator} ${park.name} (${park.state})
+                            </label>
+                            <span class="park-distance">${Math.round(park.distance)} miles</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <button class="generate-route-btn" id="generateRouteBtn" onclick="generateSelectedRoute()" disabled>
+                        Generate Route (Select parks first)
+                    </button>
+                </div>
+            `;
+            
+            resultsSection.innerHTML = html;
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Store data for route generation
+            window.tripData = {
+                nearbyParks,
+                startLocation,
+                totalDays,
+                travelMonth,
+                startCoords
+            };
+        }
+        
+        function updateRouteButton() {
+            const selectedParks = document.querySelectorAll('#parksList input:checked');
+            const button = document.getElementById('generateRouteBtn');
+            
+            if (selectedParks.length > 0) {
+                button.disabled = false;
+                button.textContent = `Generate Route (${selectedParks.length} parks selected)`;
+            } else {
+                button.disabled = true;
+                button.textContent = 'Generate Route (Select parks first)';
+            }
+        }
+        
+        function generateSelectedRoute() {
+            const selectedParkNames = Array.from(document.querySelectorAll('#parksList input:checked'))
+                .map(checkbox => checkbox.value);
+            
+            if (selectedParkNames.length === 0) {
+                alert('Please select at least one park');
+                return;
+            }
+            
+            const { nearbyParks, startLocation, totalDays, travelMonth, startCoords } = window.tripData;
+            
+            // Filter selected parks and create optimized route
+            const selectedParks = nearbyParks.filter(park => selectedParkNames.includes(park.name));
+            const optimizedRoute = createOptimizedRoute(selectedParks, startCoords, totalDays, travelMonth, startLocation);
+            
+            displayFinalItinerary(optimizedRoute);
+        }
+        
+        function createOptimizedRoute(selectedParks, startCoords, totalDays, travelMonth, startLocation) {
+            // Simple optimization: sort by longitude for east-west routing
+            const sortedParks = [...selectedParks].sort((a, b) => a.coords[1] - b.coords[1]);
+            
+            const itinerary = {
+                startingLocation: startLocation,
+                totalDays: totalDays,
+                month: travelMonth,
+                parks: [],
+                totalDrivingMiles: 0,
+                recommendations: [],
+                isCustomRoute: true,
+                startCoords: startCoords
+            };
+            
+            let remainingDays = totalDays;
+            let currentLocation = startCoords;
+            
+            for (let i = 0; i < sortedParks.length && remainingDays > 0; i++) {
+                const park = sortedParks[i];
+                let daysAtPark;
+                
+                if (remainingDays >= park.optimalDays) {
+                    daysAtPark = park.optimalDays;
+                } else if (remainingDays >= park.minDays) {
+                    daysAtPark = park.minDays;
+                } else {
+                    daysAtPark = remainingDays;
+                }
+                
+                const drivingDistance = calculateDistance(currentLocation, park.coords);
+                
+                itinerary.parks.push({
+                    name: park.name,
+                    state: park.state,
+                    days: daysAtPark,
+                    drivingMilesFromPrevious: Math.round(drivingDistance * 10) / 10,
+                    seasonalFit: park.bestMonths.includes(travelMonth),
+                    highlights: park.highlights.slice(0, 3),
+                    avgTemps: park.avgTemps[travelMonth],
+                    hikes: park.hikes,
+                    coords: park.coords
+                });
+                
+                itinerary.totalDrivingMiles += drivingDistance;
+                remainingDays -= daysAtPark;
+                currentLocation = park.coords;
+            }
+            
+            if (remainingDays > 0) {
+                itinerary.recommendations.push(`You have ${remainingDays} extra days - consider extending stays at your favorite parks`);
+            }
+            
+            itinerary.totalDrivingMiles = Math.round(itinerary.totalDrivingMiles * 10) / 10;
+            
+            return itinerary;
+        }
+        
+        function createGoogleMapsUrl(startCoords, parks, startLocation) {
+            // Create waypoints for Google Maps
+            let url = 'https://www.google.com/maps/dir/';
+            
+            // Add starting location
+            url += `${startCoords[0]},${startCoords[1]}/`;
+            
+            // Add each park as waypoint
+            parks.forEach(park => {
+                url += `${park.coords[0]},${park.coords[1]}/`;
+            });
+            
+            return url;
+        }
+
+        // Temperature conversion and display
+        let isCelsius = false;
+        
+        function toggleTemperature() {
+            isCelsius = !isCelsius;
+            const toggle = document.getElementById('tempToggle');
+            if (toggle) {
+                toggle.classList.toggle('active');
+            }
+            
+            // Update any displayed temperatures in the final itinerary
+            const results = document.getElementById('results');
+            if (results && results.style.display !== 'none' && window.currentItinerary) {
+                displayFinalItinerary(window.currentItinerary);
+            }
+        }
+        
+        function convertTemp(fahrenheit) {
+            if (isCelsius) {
+                return Math.round((fahrenheit - 32) * 5/9);
+            }
+            return fahrenheit;
+        }
+        
+        function getTempUnit() {
+            return isCelsius ? 'Â°C' : 'Â°F';
+        }
+        
+        function getDifficultyClass(difficulty) {
+            return `difficulty-${difficulty}`;
+        }
+
+        function calculateDistance(coord1, coord2) {
+            const [lat1, lon1] = coord1;
+            const [lat2, lon2] = coord2;
+            
+            const R = 3956; // Earth's radius in miles
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                     Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                     Math.sin(dLon/2) * Math.sin(dLon/2);
+            
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function displayFinalItinerary(itinerary) {
+            // Store current itinerary for temperature toggle
+            window.currentItinerary = itinerary;
+            
+            const resultsSection = document.getElementById('results');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            // Create Google Maps URL
+            const googleMapsUrl = createGoogleMapsUrl(itinerary.startCoords, itinerary.parks, itinerary.startingLocation);
+            
+            let html = `
+                <div class="itinerary-header">
+                    <div class="temperature-toggle">
+                        <div class="toggle-switch">
+                            <span>Â°F</span>
+                            <div class="switch ${isCelsius ? 'active' : ''}" id="tempToggle" onclick="toggleTemperature()">
+                                <div class="switch-slider"></div>
+                            </div>
+                            <span>Â°C</span>
+                        </div>
+                    </div>
+                    <h2>ðŸžï¸ Your Custom National Parks Route</h2>
+                    <div class="trip-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${itinerary.startingLocation}</div>
+                            <div class="stat-label">Starting Point</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${itinerary.totalDays}</div>
+                            <div class="stat-label">Total Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${monthNames[itinerary.month - 1]}</div>
+                            <div class="stat-label">Travel Month</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${itinerary.totalDrivingMiles}</div>
+                            <div class="stat-label">Total Miles</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${itinerary.parks.length}</div>
+                            <div class="stat-label">Parks to Visit</div>
+                        </div>
+                    </div>
+                    <a href="${googleMapsUrl}" target="_blank" class="google-maps-link">
+                        ðŸ—ºï¸ Open Route in Google Maps
+                    </a>
+                </div>
+                
+                <div class="parks-list">
+            `;
+            
+            itinerary.parks.forEach((park, index) => {
+                const seasonalIndicator = park.seasonalFit ? 'ðŸŒŸ' : 'â„ï¸';
+                const tempUnit = getTempUnit();
+                const highTemp = convertTemp(park.avgTemps.high);
+                const lowTemp = convertTemp(park.avgTemps.low);
+                const parkImage = parkImages[park.name] || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&crop=center';
+                
+                html += `
+                    <div class="park-card">
+                        <img src="${parkImage}" alt="${park.name} National Park" class="park-image" loading="lazy">
+                        <div class="park-header">
+                            <div class="park-name">${index + 1}. ${park.name} (${park.state})</div>
+                            <div class="seasonal-indicator">${seasonalIndicator}</div>
+                        </div>
+                        <div class="park-details">
+                            <div class="detail-item">
+                                <div class="detail-value">${park.days}</div>
+                                <div>Days</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${park.drivingMilesFromPrevious}</div>
+                                <div>${index === 0 ? 'From Start' : 'From Previous'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-value">${park.seasonalFit ? 'Optimal' : 'Off-Season'}</div>
+                                <div>Season</div>
+                            </div>
+                        </div>
+                        
+                        <div class="weather-info">
+                            <h4>ðŸŒ¡ï¸ Expected Weather</h4>
+                            <div class="weather-grid">
+                                <div class="weather-item">
+                                    <div class="weather-value">${highTemp}${tempUnit}</div>
+                                    <div>High</div>
+                                </div>
+                                <div class="weather-item">
+                                    <div class="weather-value">${lowTemp}${tempUnit}</div>
+                                    <div>Low</div>
+                                </div>
+                                <div class="weather-item">
+                                    <div class="weather-value">${Math.round((highTemp + lowTemp) / 2)}${tempUnit}</div>
+                                    <div>Avg</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="highlights">
+                            <h4>Must-See Highlights:</h4>
+                            <div class="highlights-list">
+                                ${park.highlights.map(highlight => `<span class="highlight-tag">${highlight}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="hiking-section">
+                            <div class="hiking-header">
+                                <h4>ðŸ¥¾ Popular Hikes</h4>
+                            </div>
+                            <div class="hikes-grid">
+                                ${park.hikes.map(hike => `
+                                    <div class="hike-card ${getDifficultyClass(hike.difficulty)}">
+                                        <div class="hike-name">${hike.name}</div>
+                                        <div class="hike-details">
+                                            <div class="hike-detail">
+                                                <div class="hike-detail-value">${hike.distance}</div>
+                                                <div>Miles</div>
+                                            </div>
+                                            <div class="hike-detail">
+                                                <div class="hike-detail-value">${hike.elevation}</div>
+                                                <div>Elev (ft)</div>
+                                            </div>
+                                            <div class="hike-detail">
+                                                <div class="hike-detail-value">${hike.difficulty.charAt(0).toUpperCase() + hike.difficulty.slice(1)}</div>
+                                                <div>Difficulty</div>
+                                            </div>
+                                        </div>
+                                        <div class="family-friendly">
+                                            <div class="friendly-tag ${hike.toddlerFriendly ? 'yes' : 'no'}">
+                                                ${hike.toddlerFriendly ? 'ðŸ‘¶' : 'âŒ'} Toddler
+                                            </div>
+                                            <div class="friendly-tag ${hike.strollerFriendly ? 'yes' : 'no'}">
+                                                ${hike.strollerFriendly ? 'ðŸš¼' : 'âŒ'} Stroller
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 6px; font-size: 11px; color: #666;">
+                                            ${hike.description}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            // Add share section
+            const shareUrl = createShareableLink(itinerary);
+            html += `
+                <div class="share-section">
+                    <h4>ðŸ”— Share Your Itinerary</h4>
+                    <div class="share-url-container">
+                        <input type="text" class="share-url" value="${shareUrl}" readonly id="shareUrl">
+                        <button class="copy-btn" id="copyBtn" onclick="copyToClipboard('${shareUrl}')">Copy Link</button>
+                    </div>
+                    <div class="share-buttons">
+                        <button class="share-btn email" onclick="shareViaEmail('${shareUrl}', window.currentItinerary)">
+                            ðŸ“§ Email
+                        </button>
+                        <button class="share-btn twitter" onclick="shareViaTwitter('${shareUrl}', window.currentItinerary)">
+                            ðŸ¦ Twitter
+                        </button>
+                        <button class="share-btn facebook" onclick="shareViaFacebook('${shareUrl}')">
+                            ðŸ“˜ Facebook
+                        </button>
+                        <button class="share-btn whatsapp" onclick="shareViaWhatsApp('${shareUrl}', window.currentItinerary)">
+                            ðŸ’¬ WhatsApp
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add trip summary
+            const totalHikes = itinerary.parks.reduce((sum, park) => sum + park.hikes.length, 0);
+            const easyHikes = itinerary.parks.reduce((sum, park) => 
+                sum + park.hikes.filter(hike => hike.difficulty === 'easy').length, 0);
+            const familyFriendlyHikes = itinerary.parks.reduce((sum, park) => 
+                sum + park.hikes.filter(hike => hike.toddlerFriendly).length, 0);
+            const avgTemp = Math.round(itinerary.parks.reduce((sum, park) => 
+                sum + (park.avgTemps.high + park.avgTemps.low) / 2, 0) / itinerary.parks.length);
+            
+            html += `
+                <div class="trip-summary">
+                    <h3>ðŸ“Š Trip Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-value">${itinerary.parks.length}</div>
+                            <div>National Parks</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${itinerary.totalDays}</div>
+                            <div>Total Days</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${itinerary.totalDrivingMiles}</div>
+                            <div>Driving Miles</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${totalHikes}</div>
+                            <div>Available Hikes</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${easyHikes}</div>
+                            <div>Easy Hikes</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${familyFriendlyHikes}</div>
+                            <div>Family Friendly</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${convertTemp(avgTemp)}${getTempUnit()}</div>
+                            <div>Avg Temperature</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="summary-value">${itinerary.parks.filter(p => p.seasonalFit).length}</div>
+                            <div>Optimal Season</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            if (itinerary.recommendations.length > 0) {
+                html += `
+                    <div class="recommendations">
+                        <h3>ðŸ’¡ Recommendations</h3>
+                        <ul>
+                            ${itinerary.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            resultsSection.innerHTML = html;
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Set current month as default
+        document.getElementById('travelMonth').value = new Date().getMonth() + 1;
