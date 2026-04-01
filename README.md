@@ -1,71 +1,106 @@
-# US National Parks Itinerary Generator
+# 🏞️ US National Parks Itinerary Generator
 
-An interactive web application that helps you plan the perfect national parks adventure based on your starting location and available time.
+A fully interactive web application that generates personalized road trip itineraries across US National Parks — built with AI-assisted development using **Amazon Kiro**.
 
-## Features
+🔗 **Live Demo:** [https://somyavijay.github.io/Kiro-Projects/](https://somyavijay.github.io/Kiro-Projects/)
 
-- **Smart Park Selection**: Find parks within driving distance from your starting city
-- **Seasonal Optimization**: Get recommendations based on the best time to visit each park
-- **Custom Route Planning**: Select specific parks and generate optimized driving routes
-- **Detailed Park Information**: Weather data, hiking trails, and must-see highlights
-- **Interactive Maps**: Direct integration with Google Maps for navigation
-- **Shareable Itineraries**: Generate links to share your trip plans with others
-- **Family-Friendly Options**: Filter hikes by difficulty and accessibility
 
-## Live Demo
+## 🤖 Built With AI-Assisted Development (Amazon Kiro)
 
-Visit the live application: [https://yourusername.github.io/national-parks-itinerary/](https://yourusername.github.io/national-parks-itinerary/)
+This project is a real-world example of **agentic AI-assisted software development** using [Amazon Kiro](https://kiro.dev) — an AI-powered IDE that supports spec-driven development and natural language programming.
 
-## How to Use
+### The Development Journey
 
-1. Select your starting city from the dropdown menu
-2. Enter the number of days available for your trip
-3. Choose your travel month for seasonal recommendations
-4. Click "Find Nearby Parks" to see available options
+| Stage | What Happened |
+|-------|--------------|
+| **v1 — Python CLI** | Started as a command-line Python script (`national_parks_itinerary.py`) with core logic for distance calculations and seasonal recommendations |
+| **v2 — Web App (Kiro)** | Used Amazon Kiro's agentic chat to convert, expand, and deploy the entire application as a modern web app |
+
+### How Amazon Kiro Was Used
+
+- **Spec-driven development** — Described app requirements in natural language; Kiro generated structured specs before writing any code
+- **Code generation** — Converted Python logic (Haversine distance formula, seasonal filtering) into vanilla JavaScript
+- **Architecture decisions** — Used Kiro's agentic chat to separate concerns: extracted JS into `app.js`, structured HTML, and set up GitHub Pages config
+- **Deployment automation** — Kiro generated the full GitHub Actions workflow (`pages.yml`) for CI/CD to GitHub Pages
+- **Iterative refinement** — Prompted Kiro to add features like Google Maps integration, social sharing, and mobile responsiveness that weren't in the original Python version
+
+
+## ✨ Features
+
+- **📍 Location-Based Recommendations** — Finds parks within driving distance from 27 major US cities
+- **📅 Seasonal Optimization** — Recommends parks based on best visiting months and live weather data
+- **🗺️ Google Maps Integration** — One-click route planning directly in Google Maps
+- **🥾 Trail Filtering** — Filter hikes by difficulty, family-friendliness, and stroller accessibility
+- **📤 Social Sharing** — Share itineraries via email, Twitter, Facebook, and WhatsApp
+- **🌡️ Temperature Toggle** — Switch between Fahrenheit and Celsius
+- **📱 Fully Responsive** — Works on mobile and desktop
+- **♿ Accessible** — Screen reader friendly with keyboard navigation
+
+
+## 🏔️ Parks Covered (19 Parks)
+
+Olympic · Mount Rainier · North Cascades · Yellowstone · Grand Teton · Glacier · Yosemite · Sequoia · Kings Canyon · Death Valley · Joshua Tree · Grand Canyon · Zion · Bryce Canyon · Arches · Canyonlands · Rocky Mountain · Great Smoky Mountains · Acadia
+
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Data | Custom park database with coordinates, trails, temps |
+| Distance Algorithm | Haversine formula (converted from Python) |
+| Images | Unsplash CDN |
+| Maps | Google Maps integration |
+| Deployment | GitHub Pages + GitHub Actions CI/CD |
+| AI Development | Amazon Kiro (agentic IDE) |
+
+
+## 🚀 How to Use
+
+1. Select your **starting city** from the dropdown
+2. Enter the **number of days** available
+3. Choose your **travel month**
+4. Click **"Find Nearby Parks"**
 5. Select the parks you want to visit
-6. Generate your custom route with detailed information
+6. View your custom itinerary with trails, weather, and Google Maps route
 
-## Parks Included
 
-The application includes data for 18 major US National Parks:
+## 💡 What I Learned
 
-- Yellowstone (WY/MT/ID)
-- Grand Teton (WY)
-- Glacier (MT)
-- Yosemite (CA)
-- Sequoia (CA)
-- Kings Canyon (CA)
-- Death Valley (CA/NV)
-- Joshua Tree (CA)
-- Grand Canyon (AZ)
-- Zion (UT)
-- Bryce Canyon (UT)
-- Arches (UT)
-- Canyonlands (UT)
-- Rocky Mountain (CO)
-- Great Sand Dunes (CO)
-- Great Smoky Mountains (TN/NC)
-- Mammoth Cave (KY)
-- Acadia (ME)
-- Everglades (FL)
+- How to write effective **prompts and specs** for agentic AI tools
+- **Reviewing and validating AI-generated code** — Kiro generated the structure, I verified the logic
+- How AI tools can **accelerate full-stack development** without sacrificing code quality
+- **Spec-driven development** workflow: requirements → specs → code → deployment
+- Setting up **GitHub Actions CI/CD** for automatic GitHub Pages deployment
 
-## Technology
 
-- Pure HTML, CSS, and JavaScript (no frameworks required)
-- Responsive design for mobile and desktop
-- Uses Unsplash for park imagery
-- Integrates with Google Maps for route planning
+## 📁 Project Structure
 
-## Local Development
+```
+├── index.html              # Main web app
+├── app.js                  # All JavaScript logic (AI-generated from Python)
+├── _config.yml             # Jekyll / GitHub Pages config
+├── .github/
+│   └── workflows/
+│       └── pages.yml       # GitHub Actions deployment workflow
+├── Old Python Code/
+│   └── national_parks_itinerary.py   # Original v1 Python CLI script
+└── README.md
 
-1. Clone this repository
-2. Open `index.html` in your web browser
-3. No build process or server required!
+## 🔧 Run Locally
 
-## Contributing
+```bash
+git clone https://github.com/SomyaVijay/Kiro-Projects.git
+cd Kiro-Projects
+open index.html   # or just double-click the file
+```
 
-Feel free to submit issues and enhancement requests!
+No build process, no dependencies, no server needed.
 
-## License
+## 📌 About This Project
 
-This project is open source and available under the [MIT License](LICENSE).
+This project was created as part of self-directed learning in **generative AI tools and AI-assisted software development**. The goal was to explore how modern agentic AI IDEs like Kiro can be used to build and ship real products — not just generate code snippets.
+
+---
+
+*Built with ❤️ and Amazon Kiro*
