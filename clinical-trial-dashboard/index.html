@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinical Trial Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>
+    // Browser Fetch API compatibility check
+    if (typeof fetch === 'undefined') {
+      document.addEventListener('DOMContentLoaded', function () {
+        var warning = document.getElementById('fetch-warning');
+        if (warning) warning.hidden = false;
+      });
+    }
+  </script>
+</head>
+<body>
+  <!-- Browser compatibility warning -->
+  <div id="fetch-warning" class="compat-warning" hidden role="alert">
+    <strong>Browser Not Supported:</strong> Your browser does not support the Fetch API required by this application.
+    Please upgrade to a modern browser (Chrome 42+, Firefox 39+, Edge 14+, Safari 10.1+).
+  </div>
+
+  <!-- Header -->
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <h1 class="app-title">Clinical Trial Dashboard</h1>
+      <form id="search-form" class="search-form" role="search" aria-label="Search clinical trials">
+        <label for="search-input" class="sr-only">Search trials by condition, sponsor, or NCT number</label>
+        <input
+          id="search-input"
+          type="search"
+          class="search-input"
+          placeholder="Search by condition, sponsor, or NCT number…"
+          autocomplete="off"
+          aria-describedby="search-validation"
+        />
+        <button type="submit" class="search-btn" aria-label="Submit search">Search</button>
+      </form>
+      <p id="search-validation" class="validation-msg" role="alert" aria-live="polite" hidden></p>
+    </div>
+  </header>
+
+  <!-- Main layout -->
+  <div class="app-layout">
+
+    <!-- Filter Panel (left sidebar) -->
+    <aside class="filter-panel" aria-label="Filter trials">
+      <h2 class="filter-heading">Filters</h2>
+
+      <fieldset class="filter-group">
+        <legend class="filter-legend">Phase</legend>
+        <label class="filter-label">
+          <input type="checkbox" name="phase" value="PHASE1" /> Phase I
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="phase" value="PHASE2" /> Phase II
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="phase" value="PHASE3" /> Phase III
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="phase" value="PHASE4" /> Phase IV
+        </label>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend class="filter-legend">Status</legend>
+        <label class="filter-label">
+          <input type="checkbox" name="status" value="RECRUITING" /> Recruiting
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="status" value="ACTIVE_NOT_RECRUITING" /> Active
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="status" value="COMPLETED" /> Completed
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="status" value="TERMINATED" /> Terminated
+        </label>
+      </fieldset>
+
+      <fieldset class="filter-group">
+        <legend class="filter-legend">Sponsor Type</legend>
+        <label class="filter-label">
+          <input type="checkbox" name="sponsorType" value="NIH" /> NIH / NCI
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="sponsorType" value="INDUSTRY" /> Industry
+        </label>
+        <label class="filter-label">
+          <input type="checkbox" name="sponsorType" value="ACADEMIC" /> Academic
+        </label>
+      </fieldset>
+
+      <button type="button" id="clear-filters-btn" class="clear-filters-btn">Clear All Filters</button>
+    </aside>
+
+    <!-- Main content area -->
+    <main class="main-content" role="main">
+
+      <!-- Error / status banner -->
+      <div id="error-banner" class="error-banner" role="alert" aria-live="assertive" hidden></div>
+
+      <!-- Study cards section -->
+      <section aria-label="Study results">
+        <div id="results-meta" class="results-meta" aria-live="polite"></div>
+        <div id="cards-grid" class="cards-grid" aria-label="Study cards"></div>
+        <nav id="pagination" class="pagination" aria-label="Results pagination"></nav>
+      </section>
+
+      <!-- Timeline section -->
+      <section id="timeline-section" class="timeline-section" aria-label="Study timeline">
+        <h2 class="section-heading">Timeline View</h2>
+        <p class="section-hint">Showing up to 50 studies nearest to completion. Studies with missing dates are excluded.</p>
+        <div id="timeline-container" class="timeline-container"></div>
+      </section>
+
+      <!-- Enrollment gap section -->
+      <section id="enrollment-gap-section" class="enrollment-gap-section" aria-label="Enrollment gap">
+        <h2 class="section-heading">Enrollment Gap</h2>
+        <p class="section-hint">Studies where actual enrollment is behind expected pace, sorted by largest gap.</p>
+        <div id="enrollment-gap-container" class="enrollment-gap-container"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
