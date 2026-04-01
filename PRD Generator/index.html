@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRD Generator</title>
+  <style>
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font: inherit;
+    }
+
+    /* CSS Custom Properties */
+    :root {
+      --color-primary: #2563eb;
+      --color-primary-hover: #1d4ed8;
+      --color-primary-light: #dbeafe;
+      --color-bg: #f1f5f9;
+      --color-card: #ffffff;
+      --color-text: #1e293b;
+      --color-text-muted: #64748b;
+      --color-border: #e2e8f0;
+      --color-error: #dc2626;
+      --color-success: #16a34a;
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+      --radius: 10px;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .card {
+      background-color: var(--color-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      padding: 1.5rem;
+      width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .card {
+        padding: 2rem;
+      }
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    textarea#feature-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      resize: vertical;
+    }
+
+    textarea#feature-input:focus {
+      border-color: var(--color-primary);
+      outline: 2px solid var(--color-primary-light);
+    }
+
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      height: auto;
+      cursor: pointer;
+      background-color: var(--color-card);
+    }
+
+    select:focus {
+      border-color: var(--color-primary);
+      outline: 2px solid var(--color-primary-light);
+    }
+
+    .char-counter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #char-count {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+
+    .error-msg {
+      font-size: 0.8rem;
+      color: var(--color-error);
+    }
+
+    #generate-btn {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    #generate-btn:hover {
+      background: var(--color-primary-hover);
+    }
+
+    #output-panel {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1.5px solid var(--color-border);
+    }
+
+    .prd-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .prd-section h2 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .prd-section p,
+    .prd-section li {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    .prd-section ul {
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .output-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    #copy-btn,
+    #download-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--color-primary);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #copy-btn {
+      background: white;
+      color: var(--color-primary);
+    }
+
+    #download-btn {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    #copy-btn:hover {
+      background: var(--color-primary-light);
+    }
+
+    #download-btn:hover {
+      background: var(--color-primary-hover);
+    }
+
+    @media (min-width: 640px) {
+      .selects-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .context-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .upload-btn {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      cursor: pointer;
+      padding: 0.25rem 0.625rem;
+      border: 1.5px solid var(--color-primary);
+      border-radius: 5px;
+      background: white;
+      line-height: 1.4;
+      user-select: none;
+    }
+
+    .upload-btn:hover {
+      background: var(--color-primary-light);
+    }
+
+    .file-upload-status {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      min-height: 1.2em;
+    }
+
+    .file-upload-status.error {
+      color: var(--color-error);
+    }
+
+    #context-url {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    #context-url:focus {
+      border-color: var(--color-primary);
+      outline: 2px solid var(--color-primary-light);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="card">
+      <!-- 2.1 App title/header -->
+      <h1>PRD Generator</h1>
+      <p class="subtitle">Turn a feature idea into a structured Product Requirements Document in seconds.</p>
+
+      <!-- 2.2 Feature input textarea -->
+      <div class="field-group">
+        <label for="feature-input">Feature Idea</label>
+        <textarea id="feature-input" maxlength="500" placeholder="Describe your feature idea in 1-2 sentences..."></textarea>
+        <div class="char-counter-row">
+          <span id="input-error" class="error-msg" hidden>Please enter a feature description.</span>
+          <span id="char-count">0/500</span>
+        </div>
+      </div>
+
+      <!-- 2.3 Product type selector + 2.4 Audience selector -->
+      <div class="selects-row">
+        <div class="field-group">
+          <label for="product-type">Product Type</label>
+          <select id="product-type">
+            <option value="">Select product type (optional)</option>
+            <option value="saas">SaaS / Web App</option>
+            <option value="mobile">Mobile App (iOS / Android)</option>
+            <option value="internal">Internal Tool</option>
+            <option value="data">Data / Analytics Platform</option>
+            <option value="api">API / Developer Tool</option>
+            <option value="ecommerce">E-commerce</option>
+            <option value="consumer">Consumer App</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="audience">Who is this PRD for?</label>
+          <select id="audience">
+            <option value="">Select audience (optional)</option>
+            <option value="engineering">Engineering Team</option>
+            <option value="design">Design &amp; UX</option>
+            <option value="executive">Executive Leadership</option>
+            <option value="qa">QA &amp; Testing</option>
+            <option value="sales">Sales &amp; Marketing</option>
+            <option value="compliance">Compliance &amp; Legal</option>
+            <option value="customer-success">Customer Success</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Request type selector -->
+      <div class="field-group">
+        <label for="request-type">Request Type</label>
+        <select id="request-type">
+          <option value="">Select request type (optional)</option>
+          <option value="new-feature">New Feature</option>
+          <option value="enhancement">Enhancement</option>
+          <option value="bug-fix">Bug Fix</option>
+        </select>
+      </div>
+
+      <!-- Existing product context (Enhancement only) -->
+      <div id="product-context-group" class="field-group" hidden>
+        <div class="context-label-row">
+          <label for="product-context">Existing Product Context</label>
+          <label for="context-file-input" class="upload-btn" title="Upload .txt, .pdf, or .docx">
+            ↑ Upload file
+            <input id="context-file-input" type="file" accept=".txt,.pdf,.docx" hidden>
+          </label>
+        </div>
+        <textarea id="product-context" placeholder="Paste relevant context about the existing product, feature, or workflow being enhanced..."></textarea>
+        <span id="file-upload-status" class="file-upload-status"></span>
+        <div class="field-group" style="margin-top:0.75rem;margin-bottom:0;">
+          <label for="context-url">Link to existing product or documentation (optional)</label>
+          <input id="context-url" type="url" placeholder="https://..." autocomplete="off">
+          <span id="url-fetch-status" class="file-upload-status"></span>
+        </div>
+      </div>
+
+      <!-- 2.5 Generate button -->
+      <button id="generate-btn" type="button">Generate PRD</button>
+
+      <!-- 2.6 Output panel -->
+      <section id="output-panel" hidden>
+        <div id="prd-output"></div>
+        <div class="output-actions">
+          <button id="copy-btn" type="button">Copy to Clipboard</button>
+          <button id="download-btn" type="button">Download as .txt</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    // ─── 4.1 Lookup Tables ────────────────────────────────────────────────────
+
+    const AUDIENCE_CONTEXTS = {
+      engineering: {
+        label: "Engineering Team",
+        problemEmphasis: "technical implementation constraints and system architecture",
+        storiesEmphasis: "developers and system integrators",
+        criteriaEmphasis: "technical acceptance criteria including API contracts, data schemas, and performance thresholds",
+        metricsEmphasis: "system-level KPIs: latency, error rate, throughput",
+        scopeEmphasis: "technical debt and out-of-scope integrations",
+        risksEmphasis: "technical risks: scalability, security, data integrity"
+      },
+      executive: {
+        label: "Executive Leadership",
+        problemEmphasis: "business impact, revenue opportunity, and strategic alignment",
+        storiesEmphasis: "business stakeholders and decision-makers",
+        criteriaEmphasis: "business-level success criteria and milestone gates",
+        metricsEmphasis: "revenue impact, market share, and ROI KPIs",
+        scopeEmphasis: "strategic exclusions and phase boundaries",
+        risksEmphasis: "business risks: market timing, competitive response, resource constraints"
+      },
+      design: {
+        label: "Design & UX",
+        problemEmphasis: "user experience pain points, interaction patterns, and accessibility gaps",
+        storiesEmphasis: "end users and personas",
+        criteriaEmphasis: "UX acceptance criteria including accessibility (WCAG), responsive behavior, and interaction states",
+        metricsEmphasis: "UX KPIs: task completion rate, error rate, satisfaction score",
+        scopeEmphasis: "out-of-scope UI states and edge-case flows",
+        risksEmphasis: "UX risks: cognitive load, accessibility compliance, design system conflicts"
+      },
+      qa: {
+        label: "QA & Testing",
+        problemEmphasis: "testability requirements and edge case coverage",
+        storiesEmphasis: "testers and QA engineers",
+        criteriaEmphasis: "verifiable, measurable acceptance criteria with explicit pass/fail conditions",
+        metricsEmphasis: "quality KPIs: defect escape rate, test coverage, regression rate",
+        scopeEmphasis: "out-of-scope test scenarios and environments",
+        risksEmphasis: "testing risks: flaky tests, environment parity, data dependencies"
+      },
+      sales: {
+        label: "Sales & Marketing",
+        problemEmphasis: "customer value proposition and competitive differentiation",
+        storiesEmphasis: "customers and prospects",
+        criteriaEmphasis: "customer-facing acceptance criteria and demo-ready milestones",
+        metricsEmphasis: "go-to-market KPIs: conversion rate, deal velocity, feature adoption",
+        scopeEmphasis: "out-of-scope marketing claims and unsupported use cases",
+        risksEmphasis: "go-to-market risks: messaging clarity, competitive response, launch timing"
+      },
+      compliance: {
+        label: "Compliance & Legal",
+        problemEmphasis: "regulatory obligations, data handling requirements, and audit trail needs",
+        storiesEmphasis: "compliance officers and legal reviewers",
+        criteriaEmphasis: "compliance acceptance criteria: data retention, consent flows, audit logging",
+        metricsEmphasis: "compliance KPIs: audit pass rate, data subject request SLA, incident response time",
+        scopeEmphasis: "out-of-scope regulatory jurisdictions and data categories",
+        risksEmphasis: "compliance risks: regulatory change, data breach exposure, consent gaps"
+      },
+      "customer-success": {
+        label: "Customer Success",
+        problemEmphasis: "customer onboarding friction and support burden",
+        storiesEmphasis: "customers and customer success managers",
+        criteriaEmphasis: "onboarding and support acceptance criteria",
+        metricsEmphasis: "customer outcome KPIs: time-to-value, support ticket volume, NPS",
+        scopeEmphasis: "out-of-scope support scenarios and self-service limitations",
+        risksEmphasis: "customer success risks: adoption barriers, training gaps, churn triggers"
+      },
+      "": {
+        label: "General",
+        problemEmphasis: "the core problem and user need",
+        storiesEmphasis: "users and stakeholders",
+        criteriaEmphasis: "verifiable acceptance criteria",
+        metricsEmphasis: "measurable KPIs",
+        scopeEmphasis: "explicitly excluded items",
+        risksEmphasis: "open questions and risks"
+      }
+    };
+
+    const PRODUCT_TYPE_CONTEXTS = {
+      saas: {
+        label: "SaaS / Web App",
+        framing: "scalability, multi-tenancy, and subscription lifecycle",
+        metricsHint: "MRR impact, churn reduction, activation rate",
+        scopeHint: "mobile-native features, on-premise deployment"
+      },
+      mobile: {
+        label: "Mobile App (iOS / Android)",
+        framing: "platform-specific UX patterns, offline capability, and app store constraints",
+        metricsHint: "DAU, session length, app store rating",
+        scopeHint: "web-only features, desktop-specific interactions"
+      },
+      internal: {
+        label: "Internal Tool",
+        framing: "operational efficiency, internal workflow integration, and admin controls",
+        metricsHint: "time saved per task, adoption rate, error reduction",
+        scopeHint: "external customer-facing features, public API surface"
+      },
+      data: {
+        label: "Data / Analytics Platform",
+        framing: "data pipeline reliability, query performance, and schema governance",
+        metricsHint: "query latency p95, data freshness SLA, dashboard adoption",
+        scopeHint: "real-time streaming (if batch), ML model training"
+      },
+      api: {
+        label: "API / Developer Tool",
+        framing: "developer experience, API versioning, and platform extensibility",
+        metricsHint: "API call volume, SDK adoption, time-to-first-call",
+        scopeHint: "end-user UI, non-programmatic workflows"
+      },
+      ecommerce: {
+        label: "E-commerce",
+        framing: "conversion optimization, cart and checkout flows, and payment reliability",
+        metricsHint: "conversion rate, average order value, cart abandonment rate",
+        scopeHint: "B2B procurement flows, subscription billing (if one-time)"
+      },
+      consumer: {
+        label: "Consumer App",
+        framing: "engagement, retention, and viral growth mechanics",
+        metricsHint: "DAU/MAU ratio, retention D7/D30, referral rate",
+        scopeHint: "enterprise admin features, B2B integrations"
+      },
+      "": {
+        label: "General",
+        framing: "core functionality and user value",
+        metricsHint: "adoption, engagement, and quality metrics",
+        scopeHint: "adjacent features and future phases"
+      }
+    };
+
+    // ─── 4.2 Context Getters ──────────────────────────────────────────────────
+
+    function getAudienceContext(audience) {
+      return AUDIENCE_CONTEXTS[audience] || AUDIENCE_CONTEXTS[""];
+    }
+
+    function getProductTypeContext(productType) {
+      return PRODUCT_TYPE_CONTEXTS[productType] || PRODUCT_TYPE_CONTEXTS[""];
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+
+    /**
+     * Extract a short domain noun from featureText for use in user stories.
+     * Returns something like "user", "admin", "developer", etc. based on keywords.
+     */
+    function deriveRoles(featureText, audienceCtx) {
+      const text = featureText.toLowerCase();
+      const emphasis = audienceCtx.storiesEmphasis;
+
+      // Derive primary role from audience emphasis
+      let primaryRole = "user";
+      if (emphasis.includes("developer") || emphasis.includes("system integrator")) primaryRole = "developer";
+      else if (emphasis.includes("business stakeholder") || emphasis.includes("decision-maker")) primaryRole = "product manager";
+      else if (emphasis.includes("compliance officer") || emphasis.includes("legal reviewer")) primaryRole = "compliance officer";
+      else if (emphasis.includes("tester") || emphasis.includes("QA engineer")) primaryRole = "QA engineer";
+      else if (emphasis.includes("customer success manager")) primaryRole = "customer success manager";
+      else if (emphasis.includes("customer") || emphasis.includes("prospect")) primaryRole = "customer";
+      else if (emphasis.includes("end user") || emphasis.includes("persona")) primaryRole = "end user";
+
+      // Derive secondary role from feature text keywords
+      let secondaryRole = "product manager";
+      if (text.includes("admin") || text.includes("administrat")) secondaryRole = "system administrator";
+      else if (text.includes("developer") || text.includes("api") || text.includes("sdk")) secondaryRole = "developer";
+      else if (text.includes("manager") || text.includes("team lead")) secondaryRole = "team manager";
+      else if (text.includes("analyst") || text.includes("report") || text.includes("dashboard")) secondaryRole = "data analyst";
+      else if (text.includes("customer") || text.includes("client")) secondaryRole = "customer";
+      else if (text.includes("executive") || text.includes("ceo") || text.includes("cto")) secondaryRole = "executive";
+
+      // Tertiary role is always a stakeholder
+      let tertiaryRole = "stakeholder";
+      if (primaryRole === "product manager" || secondaryRole === "product manager") tertiaryRole = "business analyst";
+      if (primaryRole === "developer" || secondaryRole === "developer") tertiaryRole = "engineering lead";
+
+      return [primaryRole, secondaryRole, tertiaryRole];
+    }
+
+    /**
+     * Extract a concise action phrase from featureText.
+     * Tries to identify the core verb+object from the description.
+     */
+    function deriveActionAndBenefit(featureText) {
+      const text = featureText.trim();
+      // Strip leading filler phrases
+      const cleaned = text
+        .replace(/^(a |an |the |implement |add |build |create |develop |introduce |enable |allow |support )/i, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      // Truncate to a reasonable length for embedding in a story
+      const short = cleaned.length > 80 ? cleaned.slice(0, 77) + "..." : cleaned;
+
+      return short;
+    }
+
+    // ─── 4.3 Problem Statement ────────────────────────────────────────────────
+
+    function buildProblemStatement(featureText, audienceCtx, typeCtx) {
+      return `${featureText} This feature addresses ${audienceCtx.problemEmphasis}, with particular attention to ${typeCtx.framing}.`;
+    }
+
+    // ─── 4.4 User Stories ─────────────────────────────────────────────────────
+
+    function buildUserStories(featureText, audienceCtx, typeCtx) {
+      const [role1, role2, role3] = deriveRoles(featureText, audienceCtx);
+      const action = deriveActionAndBenefit(featureText);
+      const text = featureText.toLowerCase();
+
+      // Derive contextual benefits from the feature description
+      let benefit1 = "I can accomplish my goals more efficiently";
+      let benefit2 = "I have visibility into the information I need";
+      let benefit3 = "the team can make informed decisions";
+
+      if (text.includes("notif") || text.includes("alert")) {
+        benefit1 = "I am informed of important changes in real time";
+        benefit2 = "I can respond quickly to critical events";
+        benefit3 = "nothing falls through the cracks";
+      } else if (text.includes("search") || text.includes("filter") || text.includes("find")) {
+        benefit1 = "I can quickly locate the information I need";
+        benefit2 = "I spend less time manually browsing through data";
+        benefit3 = "the team can surface insights faster";
+      } else if (text.includes("report") || text.includes("dashboard") || text.includes("analytic")) {
+        benefit1 = "I can track progress and identify trends at a glance";
+        benefit2 = "I can present data-driven insights to stakeholders";
+        benefit3 = "the team can make evidence-based decisions";
+      } else if (text.includes("auth") || text.includes("login") || text.includes("permission") || text.includes("access")) {
+        benefit1 = "I can securely access the resources I am authorized for";
+        benefit2 = "I can manage who has access to sensitive information";
+        benefit3 = "the organization maintains a strong security posture";
+      } else if (text.includes("export") || text.includes("download") || text.includes("import") || text.includes("upload")) {
+        benefit1 = "I can move data between systems without manual re-entry";
+        benefit2 = "I can share outputs with external stakeholders easily";
+        benefit3 = "the team reduces time spent on data transfer tasks";
+      } else if (text.includes("integrat") || text.includes("sync") || text.includes("connect")) {
+        benefit1 = "I can work across tools without switching contexts";
+        benefit2 = "data stays consistent across all connected systems";
+        benefit3 = "the team eliminates duplicate data entry";
+      } else if (text.includes("automat") || text.includes("schedul") || text.includes("workflow")) {
+        benefit1 = "repetitive tasks are handled without manual intervention";
+        benefit2 = "I can focus on higher-value work";
+        benefit3 = "the team reduces operational overhead";
+      } else if (text.includes("onboard") || text.includes("setup") || text.includes("wizard")) {
+        benefit1 = "I can get started quickly without needing support";
+        benefit2 = "the learning curve is minimized for new users";
+        benefit3 = "time-to-value is reduced for the entire team";
+      }
+
+      return [
+        `As a ${role1}, I want ${action}, so that ${benefit1}.`,
+        `As a ${role2}, I want to configure and manage ${action}, so that ${benefit2}.`,
+        `As a ${role3}, I want to review the outcomes of ${action}, so that ${benefit3}.`
+      ];
+    }
+
+    // ─── 4.5 Acceptance Criteria ──────────────────────────────────────────────
+
+    function buildAcceptanceCriteria(featureText, audienceCtx, typeCtx) {
+      const text = featureText.toLowerCase();
+      const emphasis = audienceCtx.criteriaEmphasis;
+
+      // Base criteria derived from the feature text
+      const criteria = [
+        `The feature must satisfy ${emphasis} before it is considered complete.`,
+        `Given a valid input, the system must produce the expected output within an acceptable response time.`,
+        `All error states must be handled gracefully with clear, actionable feedback to the user.`,
+        `The implementation must be consistent with ${typeCtx.framing} requirements.`
+      ];
+
+      // Swap in more specific criteria based on feature keywords
+      if (text.includes("notif") || text.includes("alert")) {
+        criteria[1] = "Notifications must be delivered within 5 seconds of the triggering event under normal load.";
+        criteria[2] = "Users must be able to configure notification preferences and opt out of non-critical alerts.";
+      } else if (text.includes("search") || text.includes("filter")) {
+        criteria[1] = "Search results must be returned within 2 seconds for datasets up to 100,000 records.";
+        criteria[2] = "Filtering must support at least 3 simultaneous filter criteria without degrading performance.";
+      } else if (text.includes("report") || text.includes("dashboard")) {
+        criteria[1] = "Reports must accurately reflect data as of the last refresh, with the refresh timestamp visible.";
+        criteria[2] = "All charts and tables must be exportable to at least one standard format (CSV, PDF, or PNG).";
+      } else if (text.includes("auth") || text.includes("login") || text.includes("permission")) {
+        criteria[1] = "Authentication must enforce MFA for accounts with elevated privileges.";
+        criteria[2] = "All access control changes must be logged with a timestamp and the acting user's identity.";
+      } else if (text.includes("export") || text.includes("import")) {
+        criteria[1] = "Exported files must be valid and parseable by the target system without manual correction.";
+        criteria[2] = "Import validation must surface all errors before committing any data changes.";
+      } else if (text.includes("integrat") || text.includes("sync")) {
+        criteria[1] = "Data sync must complete within 60 seconds for payloads up to 10,000 records.";
+        criteria[2] = "Sync conflicts must be surfaced to the user with a clear resolution workflow.";
+      }
+
+      return criteria;
+    }
+
+    // ─── 4.6 Success Metrics ──────────────────────────────────────────────────
+
+    function buildSuccessMetrics(featureText, audienceCtx, typeCtx) {
+      const text = featureText.toLowerCase();
+
+      return [
+        `Adoption: measure ${audienceCtx.metricsEmphasis} within 30 days of launch.`,
+        `Performance: track ${typeCtx.metricsHint} as primary leading indicators.`,
+        `Quality: defect escape rate for this feature remains below 2% in the first release cycle.`,
+        `Engagement: at least 60% of eligible users interact with the feature within the first two weeks.`
+      ];
+    }
+
+    // ─── 4.7 Out of Scope ─────────────────────────────────────────────────────
+
+    function buildOutOfScope(featureText, audienceCtx, typeCtx) {
+      return [
+        `${typeCtx.scopeHint} — these are explicitly deferred to a future phase.`,
+        `${audienceCtx.scopeEmphasis} — not addressed in this iteration.`,
+        `Retroactive changes to existing data or historical records are out of scope for this release.`
+      ];
+    }
+
+    // ─── 4.8 Open Questions ───────────────────────────────────────────────────
+
+    function buildOpenQuestions(featureText, audienceCtx, typeCtx) {
+      const text = featureText.toLowerCase();
+
+      return [
+        `Risk: ${audienceCtx.risksEmphasis} — how will these be mitigated before launch?`,
+        `Open question: What are the rollback and feature-flag strategies if the initial release reveals unexpected issues?`,
+        `Open question: Are there dependencies on third-party services or internal teams that could affect the delivery timeline?`
+      ];
+    }
+
+    // ─── 4.9 generatePRD ─────────────────────────────────────────────────────
+
+    function generatePRD(featureText, productType, audience) {
+      const audienceCtx = getAudienceContext(audience);
+      const typeCtx = getProductTypeContext(productType);
+
+      return {
+        problemStatement: buildProblemStatement(featureText, audienceCtx, typeCtx),
+        userStories: buildUserStories(featureText, audienceCtx, typeCtx),
+        acceptanceCriteria: buildAcceptanceCriteria(featureText, audienceCtx, typeCtx),
+        successMetrics: buildSuccessMetrics(featureText, audienceCtx, typeCtx),
+        outOfScope: buildOutOfScope(featureText, audienceCtx, typeCtx),
+        openQuestions: buildOpenQuestions(featureText, audienceCtx, typeCtx)
+      };
+    }
+
+    // ─── 4.10 slugify ─────────────────────────────────────────────────────────
+
+    function slugify(text) {
+      return text
+        .slice(0, 40)
+        .toLowerCase()
+        .replace(/ /g, "-")
+        .replace(/[^a-z0-9-]/g, "")
+        .replace(/-{2,}/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    // ─── 4.11 validateInput ───────────────────────────────────────────────────
+
+    function validateInput(value) {
+      const len = value.trim().length;
+      return len >= 1 && len <= 500;
+    }
+
+    // ─── Expose on window ─────────────────────────────────────────────────────
+
+    window.PRDGenerator = {
+      generatePRD,
+      slugify,
+      validateInput,
+      getAudienceContext,
+      getProductTypeContext,
+      buildProblemStatement,
+      buildUserStories,
+      buildAcceptanceCriteria,
+      buildSuccessMetrics,
+      buildOutOfScope,
+      buildOpenQuestions
+    };
+
+    // ─── Module-level state ───────────────────────────────────────────────────
+
+    let currentFeatureText = "";
+    let currentPRDText = "";
+
+    // ─── Task 6: Input validation and event handler ───────────────────────────
+
+    const featureInput = document.getElementById("feature-input");
+    const charCount = document.getElementById("char-count");
+    const inputError = document.getElementById("input-error");
+    const generateBtn = document.getElementById("generate-btn");
+
+    featureInput.addEventListener("input", function () {
+      charCount.textContent = featureInput.value.length + "/500";
+    });
+
+    const requestTypeSelect = document.getElementById("request-type");
+    const productContextGroup = document.getElementById("product-context-group");
+
+    requestTypeSelect.addEventListener("change", function () {
+      if (requestTypeSelect.value === "enhancement") {
+        productContextGroup.removeAttribute("hidden");
+      } else {
+        productContextGroup.setAttribute("hidden", "");
+      }
+    });
+
+    // ─── File upload handler ──────────────────────────────────────────────────
+
+    const contextFileInput = document.getElementById("context-file-input");
+    const productContextArea = document.getElementById("product-context");
+    const fileUploadStatus = document.getElementById("file-upload-status");
+
+    contextFileInput.addEventListener("change", function () {
+      const file = contextFileInput.files[0];
+      if (!file) return;
+
+      fileUploadStatus.className = "file-upload-status";
+      fileUploadStatus.textContent = "Reading " + file.name + "…";
+
+      const ext = file.name.split(".").pop().toLowerCase();
+
+      if (ext === "txt") {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          productContextArea.value = e.target.result;
+          fileUploadStatus.textContent = "✓ " + file.name + " loaded.";
+        };
+        reader.onerror = function () {
+          fileUploadStatus.className = "file-upload-status error";
+          fileUploadStatus.textContent = "Failed to read file.";
+        };
+        reader.readAsText(file);
+
+      } else if (ext === "docx") {
+        // .docx is a zip — extract word/document.xml and strip tags
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const bytes = new Uint8Array(e.target.result);
+            // Find word/document.xml inside the zip by scanning for its content
+            const str = new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+            // Locate the XML content between <w:body> tags
+            const bodyMatch = str.match(/<w:body>([\s\S]*?)<\/w:body>/);
+            if (!bodyMatch) throw new Error("Could not locate document body.");
+            // Strip all XML tags and decode common entities
+            const text = bodyMatch[1]
+              .replace(/<w:p[ >]/g, "\n<w:p>")   // paragraph breaks
+              .replace(/<[^>]+>/g, "")             // strip tags
+              .replace(/&amp;/g, "&")
+              .replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">")
+              .replace(/&quot;/g, '"')
+              .replace(/&#x[0-9A-Fa-f]+;/g, "")
+              .replace(/\n{3,}/g, "\n\n")
+              .trim();
+            productContextArea.value = text;
+            fileUploadStatus.textContent = "✓ " + file.name + " loaded.";
+          } catch (err) {
+            fileUploadStatus.className = "file-upload-status error";
+            fileUploadStatus.textContent = "Could not parse .docx — please paste the content manually.";
+          }
+        };
+        reader.onerror = function () {
+          fileUploadStatus.className = "file-upload-status error";
+          fileUploadStatus.textContent = "Failed to read file.";
+        };
+        reader.readAsArrayBuffer(file);
+
+      } else if (ext === "pdf") {
+        fileUploadStatus.className = "file-upload-status error";
+        fileUploadStatus.textContent = "PDF text extraction requires a library — please paste the content manually.";
+        contextFileInput.value = "";
+
+      } else {
+        fileUploadStatus.className = "file-upload-status error";
+        fileUploadStatus.textContent = "Unsupported file type. Use .txt, .pdf, or .docx.";
+        contextFileInput.value = "";
+      }
+
+      // Reset input so the same file can be re-selected if needed
+      contextFileInput.value = "";
+    });
+
+    // ─── URL fetch handler ────────────────────────────────────────────────────
+
+    const contextUrlInput = document.getElementById("context-url");
+    const urlFetchStatus = document.getElementById("url-fetch-status");
+
+    function stripHtml(html) {
+      // Remove scripts, styles, and nav/header/footer noise
+      return html
+        .replace(/<script[\s\S]*?<\/script>/gi, "")
+        .replace(/<style[\s\S]*?<\/style>/gi, "")
+        .replace(/<(nav|header|footer|aside)[^>]*>[\s\S]*?<\/\1>/gi, "")
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/p>/gi, "\n")
+        .replace(/<\/li>/gi, "\n")
+        .replace(/<\/h[1-6]>/gi, "\n")
+        .replace(/<[^>]+>/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+    }
+
+    contextUrlInput.addEventListener("blur", function () {
+      const url = contextUrlInput.value.trim();
+      if (!url) return;
+
+      // Basic URL validation
+      try { new URL(url); } catch (_) {
+        urlFetchStatus.className = "file-upload-status error";
+        urlFetchStatus.textContent = "Please enter a valid URL.";
+        return;
+      }
+
+      urlFetchStatus.className = "file-upload-status";
+      urlFetchStatus.textContent = "Fetching page content…";
+
+      const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(url);
+
+      fetch(proxyUrl)
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          if (!data || !data.contents) throw new Error("Empty response");
+          const text = stripHtml(data.contents);
+          if (!text) throw new Error("No readable content found");
+
+          const existing = productContextArea.value.trim();
+          productContextArea.value = existing
+            ? existing + "\n\n--- Content from " + url + " ---\n\n" + text
+            : "--- Content from " + url + " ---\n\n" + text;
+
+          urlFetchStatus.className = "file-upload-status";
+          urlFetchStatus.textContent = "✓ Page content appended.";
+        })
+        .catch(function (err) {
+          urlFetchStatus.className = "file-upload-status error";
+          urlFetchStatus.textContent = "Could not fetch URL — continuing with existing context.";
+        });
+    });
+
+    generateBtn.addEventListener("click", function () {
+      const featureText = featureInput.value;
+      const productType = document.getElementById("product-type").value;
+      const audience = document.getElementById("audience").value;
+
+      if (!window.PRDGenerator.validateInput(featureText)) {
+        inputError.removeAttribute("hidden");
+        featureInput.style.borderColor = "var(--color-error)";
+        return;
+      }
+
+      inputError.setAttribute("hidden", "");
+      featureInput.style.borderColor = "";
+
+      const sections = window.PRDGenerator.generatePRD(featureText, productType, audience);
+      renderOutput(sections, featureText);
+    });
+
+    // ─── Task 7: Output rendering ─────────────────────────────────────────────
+
+    function buildListHTML(items) {
+      return "<ul>" + items.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul>";
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderOutput(sections, featureText) {
+      currentFeatureText = featureText;
+
+      // Build plain-text PRD
+      const title = featureText.length > 60 ? featureText.slice(0, 60) : featureText;
+      const date = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+      currentPRDText = [
+        "PRD Generator \u2014 " + title,
+        "Generated on " + date,
+        "",
+        "\uD83D\uDCCC PROBLEM STATEMENT",
+        sections.problemStatement,
+        "",
+        "\uD83D\uDC64 USER STORIES",
+        sections.userStories.map(function (s) { return "- " + s; }).join("\n"),
+        "",
+        "\u2705 ACCEPTANCE CRITERIA",
+        sections.acceptanceCriteria.map(function (s) { return "- " + s; }).join("\n"),
+        "",
+        "\uD83D\uDCCA SUCCESS METRICS",
+        sections.successMetrics.map(function (s) { return "- " + s; }).join("\n"),
+        "",
+        "\uD83D\uDEAB OUT OF SCOPE",
+        sections.outOfScope.map(function (s) { return "- " + s; }).join("\n"),
+        "",
+        "\u26A0\uFE0F OPEN QUESTIONS & RISKS",
+        sections.openQuestions.map(function (s) { return "- " + s; }).join("\n")
+      ].join("\n");
+
+      // Build HTML
+      var html = [
+        '<div class="prd-section"><h2>📌 Problem Statement</h2><p>' + escapeHtml(sections.problemStatement) + "</p></div>",
+        '<div class="prd-section"><h2>👤 User Stories</h2>' + buildListHTML(sections.userStories) + "</div>",
+        '<div class="prd-section"><h2>✅ Acceptance Criteria</h2>' + buildListHTML(sections.acceptanceCriteria) + "</div>",
+        '<div class="prd-section"><h2>📊 Success Metrics</h2>' + buildListHTML(sections.successMetrics) + "</div>",
+        '<div class="prd-section"><h2>🚫 Out of Scope</h2>' + buildListHTML(sections.outOfScope) + "</div>",
+        '<div class="prd-section"><h2>⚠️ Open Questions & Risks</h2>' + buildListHTML(sections.openQuestions) + "</div>"
+      ].join("");
+
+      document.getElementById("prd-output").innerHTML = html;
+
+      var outputPanel = document.getElementById("output-panel");
+      outputPanel.removeAttribute("hidden");
+      outputPanel.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // ─── Task 8: Copy to Clipboard ────────────────────────────────────────────
+
+    // Add copy error span after output-actions
+    (function () {
+      var outputActions = document.querySelector(".output-actions");
+      var copyError = document.createElement("span");
+      copyError.id = "copy-error";
+      copyError.className = "error-msg";
+      copyError.setAttribute("hidden", "");
+      copyError.textContent = "Copy failed \u2014 please select and copy manually.";
+      outputActions.insertAdjacentElement("afterend", copyError);
+    })();
+
+    function copyToClipboard() {
+      var copyBtn = document.getElementById("copy-btn");
+      var copyError = document.getElementById("copy-error");
+
+      function onSuccess() {
+        copyBtn.textContent = "\u2713 Copied!";
+        setTimeout(function () {
+          copyBtn.textContent = "Copy to Clipboard";
+        }, 1500);
+      }
+
+      function onFailure() {
+        copyError.removeAttribute("hidden");
+        setTimeout(function () {
+          copyError.setAttribute("hidden", "");
+        }, 3000);
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentPRDText).then(onSuccess, function () {
+          // Try execCommand fallback
+          try {
+            var ta = document.createElement("textarea");
+            ta.value = currentPRDText;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            var ok = document.execCommand("copy");
+            document.body.removeChild(ta);
+            if (ok) { onSuccess(); } else { onFailure(); }
+          } catch (e) {
+            onFailure();
+          }
+        });
+      } else {
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = currentPRDText;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          if (ok) { onSuccess(); } else { onFailure(); }
+        } catch (e) {
+          onFailure();
+        }
+      }
+    }
+
+    document.getElementById("copy-btn").addEventListener("click", copyToClipboard);
+
+    // ─── Task 9: Download as .txt ─────────────────────────────────────────────
+
+    function downloadAsTxt() {
+      var slug = window.PRDGenerator.slugify(currentFeatureText);
+      var filename = "prd-" + slug + ".txt";
+      var blob = new Blob([currentPRDText], { type: "text/plain" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Check Blob availability on page load; hide download button if unavailable
+    (function () {
+      if (typeof Blob === "undefined" || typeof URL === "undefined" || typeof URL.createObjectURL !== "function") {
+        document.getElementById("download-btn").setAttribute("hidden", "");
+      }
+    })();
+
+    document.getElementById("download-btn").addEventListener("click", downloadAsTxt);
+  </script>
+</body>
+</html>
