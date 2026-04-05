@@ -23,7 +23,7 @@
  */
 
 const API_BASE = 'https://clinicaltrials.gov/api/v2/studies';
-const TIMEOUT_MS = 15_000;
+const TIMEOUT_MS = 30_000; // Increased from 15s to 30s to handle larger result sets
 
 /** @type {Record<string, 'NIH'|'INDUSTRY'|'ACADEMIC'>} */
 const SPONSOR_CLASS_MAP = {
@@ -56,24 +56,29 @@ function normalizeStudy(raw) {
   const phase = rawPhase ? (phaseMap[rawPhase] ?? null) : null;
 
   // Sponsor
+  // FIX: NCI is a division of NIH — check both leadSponsor name and class
+  // to correctly identify NCI-sponsored studies as NIH type
   const leadSponsor = sponsor.leadSponsor ?? {};
   const sponsorName = leadSponsor.name ?? null;
   const rawClass = leadSponsor.class ?? null;
-  const sponsorType = rawClass ? (SPONSOR_CLASS_MAP[rawClass] ?? null) : null;
+
+  // If sponsor name contains NCI or National Cancer Institute, always map to NIH
+  const isNCI = sponsorName && (
+    sponsorName.toUpperCase().includes('NATIONAL CANCER INSTITUTE') ||
+    sponsorName.toUpperCase().includes('NCI')
+  );
+  const sponsorType = isNCI ? 'NIH' : (rawClass ? (SPONSOR_CLASS_MAP[rawClass] ?? 'ACADEMIC') : null);
 
   // Enrollment
-  // The API returns one count with a type: 'ACTUAL' (real enrolled count) or 'ANTICIPATED' (target estimate).
-  // enrollmentTarget is always the count value.
-  // enrollmentActual is only set when type === 'ACTUAL'; otherwise we have no real enrollment data.
   const enrollmentInfo = design.enrollmentInfo ?? {};
   const enrollmentCount = enrollmentInfo.count ?? null;
-  const enrollmentType = enrollmentInfo.type ?? null; // 'ACTUAL' | 'ANTICIPATED'
+  const enrollmentType = enrollmentInfo.type ?? null;
   const enrollmentTarget = enrollmentCount !== null ? Number(enrollmentCount) : null;
   const enrollmentActual = (enrollmentType === 'ACTUAL' && enrollmentCount !== null)
     ? Number(enrollmentCount)
     : null;
 
-  // Dates — normalize 'YYYY-MM-DD' or 'YYYY-MM' → 'YYYY-MM-DD'
+  // Dates
   const startRaw = status.startDateStruct?.date ?? null;
   const completionRaw = status.primaryCompletionDateStruct?.date ?? null;
 
@@ -88,7 +93,7 @@ function normalizeStudy(raw) {
     enrollmentActual,
     startDate: normalizeDate(startRaw),
     completionDate: normalizeDate(completionRaw),
-    scorecard: 'YELLOW', // placeholder; computed by scorecard.js
+    scorecard: 'YELLOW',
   };
 }
 
@@ -99,11 +104,8 @@ function normalizeStudy(raw) {
  */
 function normalizeDate(raw) {
   if (!raw) return null;
-  // Already full ISO date
   if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
-  // 'YYYY-MM' → append '-01'
   if (/^\d{4}-\d{2}$/.test(raw)) return `${raw}-01`;
-  // 'Month DD, YYYY' format from API (e.g. "January 1, 2020")
   const parsed = Date.parse(raw);
   if (!isNaN(parsed)) {
     return new Date(parsed).toISOString().slice(0, 10);
@@ -113,13 +115,20 @@ function normalizeDate(raw) {
 
 /**
  * Fetch studies from ClinicalTrials.gov v2 API.
+ *
+ * FIX 1: Increased default pageSize from 100 to 500 so recent studies
+ *         are not cut off in large result sets.
+ * FIX 2: Added sort by startDate descending so newest studies (2024/2025)
+ *         always appear first instead of being buried by relevance ranking.
+ * FIX 3: Timeout increased to 30s to accommodate larger fetches.
+ *
  * @param {string} query - Free-text search term
- * @param {number} [pageSize=100] - Number of results (max 1000)
+ * @param {number} [pageSize=500] - Number of results (max 1000)
  * @param {string|null} [pageToken=null] - Pagination token for next page
  * @returns {Promise<{studies: Study[], nextPageToken: string|null}>}
  * @throws {ApiError}
  */
-export async function fetchStudies(query, pageSize = 100, pageToken = null) {
+export async function fetchStudies(query, pageSize = 500, pageToken = null) {
   const controller = new AbortController();
   const timerId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
@@ -127,7 +136,10 @@ export async function fetchStudies(query, pageSize = 100, pageToken = null) {
     'query.term': query,
     pageSize: String(pageSize),
     format: 'json',
+    // FIX: Sort by start date descending so 2024/2025 studies appear first
+    'sort': 'StartDate:desc',
   });
+
   if (pageToken) params.set('pageToken', pageToken);
 
   const url = `${API_BASE}?${params.toString()}`;
@@ -138,11 +150,9 @@ export async function fetchStudies(query, pageSize = 100, pageToken = null) {
   } catch (err) {
     clearTimeout(timerId);
     if (err.name === 'AbortError') {
-      /** @type {ApiError} */
-      const apiError = { type: 'timeout', message: 'Request timed out after 15 seconds.', status: null };
+      const apiError = { type: 'timeout', message: 'Request timed out. Try a more specific search term.', status: null };
       throw apiError;
     }
-    /** @type {ApiError} */
     const apiError = { type: 'network', message: err.message || 'Network error.', status: null };
     throw apiError;
   }
@@ -150,7 +160,6 @@ export async function fetchStudies(query, pageSize = 100, pageToken = null) {
   clearTimeout(timerId);
 
   if (!response.ok) {
-    /** @type {ApiError} */
     const apiError = {
       type: 'http',
       message: `HTTP error ${response.status}: ${response.statusText}`,
