@@ -28,6 +28,8 @@ function parseDate(dateStr) {
  */
 export function computeEnrollmentGap(study) {
   if (study.enrollmentTarget === null || study.startDate === null) return null;
+  // Without actual enrollment data we can't compute a real gap
+  if (study.enrollmentActual === null) return null;
 
   const today = Date.now();
   const startMs = parseDate(study.startDate).getTime();
@@ -42,14 +44,17 @@ export function computeEnrollmentGap(study) {
     totalExpectedDays = PHASE_DAYS[study.phase] ?? DEFAULT_PHASE_DAYS;
   }
 
+  if (totalExpectedDays <= 0) return null;
+
   const expectedEnrollment = study.enrollmentTarget * (elapsedDays / totalExpectedDays);
-  const gap = expectedEnrollment - (study.enrollmentActual ?? 0);
+  const gap = expectedEnrollment - study.enrollmentActual;
 
   if (gap <= 0) return null;
 
   return {
     nctId: study.nctId,
     target: study.enrollmentTarget,
+    actual: study.enrollmentActual,
     gap: Math.round(gap),
     elapsedDays: Math.round(elapsedDays),
   };
@@ -64,7 +69,7 @@ export function renderEnrollmentGap(studies) {
   if (!container) return;
 
   const excluded = studies.filter(
-    (s) => s.enrollmentTarget === null || s.startDate === null
+    (s) => s.enrollmentTarget === null || s.startDate === null || s.enrollmentActual === null
   );
 
   const eligible = studies
@@ -89,7 +94,7 @@ export function renderEnrollmentGap(studies) {
 
     const thead = document.createElement('thead');
     thead.innerHTML =
-      '<tr><th>NCT Number</th><th>Enrollment Target</th><th>Enrollment Gap</th><th>Elapsed Time</th></tr>';
+      '<tr><th>NCT Number</th><th>Target</th><th>Actual</th><th>Gap</th><th>Elapsed</th></tr>';
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
@@ -98,7 +103,8 @@ export function renderEnrollmentGap(studies) {
       tr.innerHTML = `
         <td>${item.nctId}</td>
         <td>${item.target}</td>
-        <td class="gap-value">${item.gap}</td>
+        <td>${item.actual}</td>
+        <td class="gap-value">-${item.gap}</td>
         <td>${item.elapsedDays} days</td>
       `;
       tbody.appendChild(tr);
@@ -110,7 +116,7 @@ export function renderEnrollmentGap(studies) {
   if (excluded.length > 0) {
     const note = document.createElement('p');
     note.className = 'enrollment-excluded-note';
-    note.textContent = `${excluded.length} studies excluded (missing enrollment target or start date)`;
+    note.textContent = `${excluded.length} studies excluded (missing enrollment target, start date, or actual enrollment count)`;
     container.appendChild(note);
   }
 }

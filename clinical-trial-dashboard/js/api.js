@@ -62,10 +62,16 @@ function normalizeStudy(raw) {
   const sponsorType = rawClass ? (SPONSOR_CLASS_MAP[rawClass] ?? null) : null;
 
   // Enrollment
+  // The API returns one count with a type: 'ACTUAL' (real enrolled count) or 'ANTICIPATED' (target estimate).
+  // enrollmentTarget is always the count value.
+  // enrollmentActual is only set when type === 'ACTUAL'; otherwise we have no real enrollment data.
   const enrollmentInfo = design.enrollmentInfo ?? {};
   const enrollmentCount = enrollmentInfo.count ?? null;
+  const enrollmentType = enrollmentInfo.type ?? null; // 'ACTUAL' | 'ANTICIPATED'
   const enrollmentTarget = enrollmentCount !== null ? Number(enrollmentCount) : null;
-  const enrollmentActual = enrollmentTarget; // API returns one value; both fields share it
+  const enrollmentActual = (enrollmentType === 'ACTUAL' && enrollmentCount !== null)
+    ? Number(enrollmentCount)
+    : null;
 
   // Dates — normalize 'YYYY-MM-DD' or 'YYYY-MM' → 'YYYY-MM-DD'
   const startRaw = status.startDateStruct?.date ?? null;

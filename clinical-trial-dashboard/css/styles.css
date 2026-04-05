@@ -259,6 +259,42 @@ body {
   outline: none;
 }
 
+/* ── Sort Buttons ── */
+.sort-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.sort-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: var(--font-size-label);
+  padding: var(--space-xs) var(--space-sm);
+  text-align: left;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  width: 100%;
+}
+
+.sort-btn:hover,
+.sort-btn:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+  outline: none;
+}
+
+.sort-btn.active,
+.sort-btn[aria-pressed="true"] {
+  background-color: rgba(30, 136, 229, 0.15);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
 /* ── Main Content ── */
 .main-content {
   flex: 1;

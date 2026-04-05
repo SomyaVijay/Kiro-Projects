@@ -16,6 +16,7 @@ const AppState = {
   allStudies: [],
   filteredStudies: [],
   filters: { phases: [], statuses: [], sponsorTypes: [] },
+  sort: null, // null | { field: 'startDate', dir: 'asc' | 'desc' }
   currentPage: 1,
   loading: false,
   lastQuery: null,
@@ -45,8 +46,23 @@ function showLoading() {
   }
 }
 
+function sortStudies(studies) {
+  if (!AppState.sort) return studies;
+  return [...studies].sort((a, b) => {
+    const aVal = a.startDate ?? '';
+    const bVal = b.startDate ?? '';
+    // nulls last regardless of direction
+    if (!aVal && !bVal) return 0;
+    if (!aVal) return 1;
+    if (!bVal) return -1;
+    const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+    return AppState.sort.dir === 'asc' ? cmp : -cmp;
+  });
+}
+
 function runFilterAndRender() {
-  AppState.filteredStudies = applyFilters(AppState.allStudies, AppState.filters);
+  const filtered = applyFilters(AppState.allStudies, AppState.filters);
+  AppState.filteredStudies = sortStudies(filtered);
   AppState.currentPage = 1;
 
   if (AppState.filteredStudies.length === 0) {
@@ -91,7 +107,8 @@ async function handleSearch(query) {
     AppState.allStudies = studies;
     AppState.lastQuery = query;
     AppState.filters = readFilters();
-    AppState.filteredStudies = applyFilters(AppState.allStudies, AppState.filters);
+    const filtered = applyFilters(AppState.allStudies, AppState.filters);
+    AppState.filteredStudies = sortStudies(filtered);
     AppState.currentPage = 1;
 
     if (AppState.filteredStudies.length === 0) {
@@ -149,13 +166,45 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+  // Sort buttons
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dir = btn.dataset.dir;
+      const isActive = btn.getAttribute('aria-pressed') === 'true';
+
+      // Toggle off if already active — clicking same button again clears sort
+      if (isActive) {
+        AppState.sort = null;
+        document.querySelectorAll('.sort-btn').forEach(b => {
+          b.setAttribute('aria-pressed', 'false');
+          b.classList.remove('active');
+        });
+      } else {
+        AppState.sort = { field: 'startDate', dir };
+        document.querySelectorAll('.sort-btn').forEach(b => {
+          b.setAttribute('aria-pressed', 'false');
+          b.classList.remove('active');
+        });
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.add('active');
+      }
+
+      runFilterAndRender();
+    });
+  });
+
   // 9.1 — Clear filters button
   const clearBtn = document.getElementById('clear-filters-btn');
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       document.querySelectorAll('input[name="phase"], input[name="status"], input[name="sponsorType"]')
         .forEach(cb => { cb.checked = false; });
+      document.querySelectorAll('.sort-btn').forEach(b => {
+        b.setAttribute('aria-pressed', 'false');
+        b.classList.remove('active');
+      });
       AppState.filters = { phases: [], statuses: [], sponsorTypes: [] };
+      AppState.sort = null;
       runFilterAndRender();
     });
   }
