@@ -183,22 +183,17 @@ async function fetchPage(query, statusFilter, pageToken) {
 /**
  * Fetch studies from ClinicalTrials.gov v2 API, paginating up to MAX_PAGES.
  * @param {string} query - Free-text search term
- * @param {string[]} [extraStatuses=[]] - Additional statuses beyond the default active filter
+ * @param {string} [overallStatus] - Comma-separated overallStatus values for the API filter.
+ *   Defaults to the active-studies filter.
  * @returns {Promise<{studies: Study[]}>}
  * @throws {ApiError}
  */
-export async function fetchStudies(query, extraStatuses = []) {
-  // Build status filter: always include default active statuses; add extras if requested
-  const expanded = extraStatuses.filter(s => EXPANDED_STATUSES.has(s));
-  const statusFilter = expanded.length > 0
-    ? `${DEFAULT_STATUS_FILTER},${expanded.join(',')}`
-    : DEFAULT_STATUS_FILTER;
-
+export async function fetchStudies(query, overallStatus = DEFAULT_STATUS_FILTER) {
   let allStudies = [];
   let pageToken = null;
 
   for (let page = 0; page < MAX_PAGES; page++) {
-    const { studies, nextPageToken } = await fetchPage(query, statusFilter, pageToken);
+    const { studies, nextPageToken } = await fetchPage(query, overallStatus, pageToken);
     allStudies = allStudies.concat(studies);
     if (!nextPageToken) break;
     pageToken = nextPageToken;

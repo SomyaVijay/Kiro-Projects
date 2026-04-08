@@ -25,14 +25,20 @@ const AppState = {
 // Statuses that require a fresh API fetch when toggled
 const FETCH_TRIGGER_STATUSES = new Set(['COMPLETED', 'TERMINATED']);
 
+// Default active statuses always sent to the API
+const DEFAULT_API_STATUSES = 'RECRUITING,ACTIVE_NOT_RECRUITING,ENROLLING_BY_INVITATION';
+
 /**
- * Return the extra statuses (beyond the default active filter) currently checked.
- * @returns {string[]}
+ * Build the overallStatus string for the API based on currently checked status checkboxes.
+ * Always includes the default active statuses; appends COMPLETED/TERMINATED if checked.
+ * @returns {string}
  */
-function readExtraStatuses() {
-  return [...document.querySelectorAll('input[name="status"]:checked')]
-    .map(el => el.value)
-    .filter(v => FETCH_TRIGGER_STATUSES.has(v));
+function buildApiStatusFilter() {
+  const checked = [...document.querySelectorAll('input[name="status"]:checked')].map(el => el.value);
+  const extras = checked.filter(v => FETCH_TRIGGER_STATUSES.has(v));
+  return extras.length > 0
+    ? `${DEFAULT_API_STATUSES},${extras.join(',')}`
+    : DEFAULT_API_STATUSES;
 }
 
 
@@ -90,7 +96,7 @@ function runFilterAndRender() {
 
 // ── Search handler ────────────────────────────────────────────────────────────
 
-async function handleSearch(query, extraStatuses = []) {
+async function handleSearch(query, overallStatus = DEFAULT_API_STATUSES) {
   const validationEl = document.getElementById('search-validation');
 
   if (!query.trim()) {
@@ -110,7 +116,7 @@ async function handleSearch(query, extraStatuses = []) {
   showLoading();
 
   try {
-    const { studies } = await fetchStudies(query, extraStatuses);
+    const { studies } = await fetchStudies(query, overallStatus);
 
     for (const study of studies) {
       study.scorecard = computeScorecard(study);
@@ -118,7 +124,10 @@ async function handleSearch(query, extraStatuses = []) {
 
     AppState.allStudies = studies;
     AppState.lastQuery = query;
+    // Read UI filters but clear statuses — the API already filtered by status,
+    // so client-side status filtering would incorrectly exclude results.
     AppState.filters = readFilters();
+    AppState.filters.statuses = [];
     const filtered = applyFilters(AppState.allStudies, AppState.filters);
     AppState.filteredStudies = sortStudies(filtered);
     AppState.currentPage = 1;
@@ -175,8 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
       cb.addEventListener('change', () => {
         AppState.filters = readFilters();
         if (cb.name === 'status' && FETCH_TRIGGER_STATUSES.has(cb.value) && AppState.lastQuery) {
-          // Need a fresh API fetch to include/exclude these statuses
-          handleSearch(AppState.lastQuery, readExtraStatuses());
+          // Build combined API status string and re-fetch with loading indicator
+          showLoading();
+          handleSearch(AppState.lastQuery, buildApiStatusFilter());
         } else {
           runFilterAndRender();
         }
@@ -222,7 +232,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       AppState.filters = { phases: [], statuses: [], sponsorTypes: [] };
       AppState.sort = null;
-      runFilterAndRender();
+      // Re-fetch with default status filter to drop any COMPLETED/TERMINATED results
+      if (AppState.lastQuery) {
+        handleSearch(AppState.lastQuery, DEFAULT_API_STATUSES);
+      } else {
+        runFilterAndRender();
+      }
     });
   }
 
@@ -238,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (errorBanner) {
     errorBanner.addEventListener('click', (e) => {
       if (e.target.id === 'retry-btn' && AppState.lastQuery) {
-        handleSearch(AppState.lastQuery, readExtraStatuses());
+        handleSearch(AppState.lastQuery, buildApiStatusFilter());
       }
     });
   }
