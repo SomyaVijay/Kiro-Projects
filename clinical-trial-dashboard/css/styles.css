@@ -172,6 +172,13 @@ body {
   margin-top: var(--space-xs);
 }
 
+.search-hint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-label);
+  margin-top: var(--space-xs);
+  opacity: 0.8;
+}
+
 /* ── App Layout ── */
 .app-layout {
   display: flex;

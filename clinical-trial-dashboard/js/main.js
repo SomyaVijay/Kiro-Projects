@@ -22,7 +22,19 @@ const AppState = {
   lastQuery: null,
 };
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// Statuses that require a fresh API fetch when toggled
+const FETCH_TRIGGER_STATUSES = new Set(['COMPLETED', 'TERMINATED']);
+
+/**
+ * Return the extra statuses (beyond the default active filter) currently checked.
+ * @returns {string[]}
+ */
+function readExtraStatuses() {
+  return [...document.querySelectorAll('input[name="status"]:checked')]
+    .map(el => el.value)
+    .filter(v => FETCH_TRIGGER_STATUSES.has(v));
+}
+
 
 function readFilters() {
   return {
@@ -78,7 +90,7 @@ function runFilterAndRender() {
 
 // ── Search handler ────────────────────────────────────────────────────────────
 
-async function handleSearch(query) {
+async function handleSearch(query, extraStatuses = []) {
   const validationEl = document.getElementById('search-validation');
 
   if (!query.trim()) {
@@ -98,7 +110,7 @@ async function handleSearch(query) {
   showLoading();
 
   try {
-    const { studies } = await fetchStudies(query, 100);
+    const { studies } = await fetchStudies(query, extraStatuses);
 
     for (const study of studies) {
       study.scorecard = computeScorecard(study);
@@ -157,12 +169,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 9.1 — Filter checkboxes
+  // Filter checkboxes — re-fetch if COMPLETED/TERMINATED toggled, otherwise client-filter
   document.querySelectorAll('input[name="phase"], input[name="status"], input[name="sponsorType"]')
     .forEach(cb => {
       cb.addEventListener('change', () => {
         AppState.filters = readFilters();
-        runFilterAndRender();
+        if (cb.name === 'status' && FETCH_TRIGGER_STATUSES.has(cb.value) && AppState.lastQuery) {
+          // Need a fresh API fetch to include/exclude these statuses
+          handleSearch(AppState.lastQuery, readExtraStatuses());
+        } else {
+          runFilterAndRender();
+        }
       });
     });
 
@@ -221,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (errorBanner) {
     errorBanner.addEventListener('click', (e) => {
       if (e.target.id === 'retry-btn' && AppState.lastQuery) {
-        handleSearch(AppState.lastQuery);
+        handleSearch(AppState.lastQuery, readExtraStatuses());
       }
     });
   }
